@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+	<metadata>
+		<id>$id$</id>
+		<version>$version$</version>
+		<title>$title$</title>
+		<authors>$author$</authors>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<license type="expression">MIT</license>
+		<owners>FFF</owners>
+		<description>$description$</description>
+		<releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+		<copyright>$copyright$</copyright>
+		<tags>Clipboard</tags>
+		<dependencies>
+			<group targetFramework=".NETFramework4.8">
+				<dependency id="System.IO.FileSystem.AccessControl" version="5.0.0"  exclude="Build,Analyzers"/>
+				<dependency id="System.IO.Abstractions" version="19.2.22" exclude="Build,Analyzers"/>
+				<dependency id="System.Runtime.CompilerServices.Unsafe" version="6.0.0" exclude="Build,Analyzers"/>
+				<dependency id="System.Security.AccessControl" version="6.0.0" exclude="Build,Analyzers"/>
+			</group>
+		</dependencies>
+	</metadata>
+</package>
