@@ -21,6 +21,21 @@ namespace FFF.Clipboard
         private const uint cfText = 1;
 
         /// <summary>
+        /// Synchronously sets the specified text content to the system clipboard in a given format. This method wraps
+        /// the asynchronous operation in a Task.Run to avoid deadlocks and waits for its completion.
+        /// It's designed for scenarios where asynchronous execution is not possible or desired, but should be used
+        /// with caution to avoid blocking the main thread in UI applications.
+        /// </summary>
+        /// <param name="content">The text content to set in the clipboard.</param>
+        /// <param name="type">The type of data being set (e.g., file path or plain text).</param>
+        /// <param name="dataFormat">The format in which the text should be set in the clipboard.</param>
+        public static void SetText(string content, TypeDataFormat type, System.Windows.TextDataFormat dataFormat)
+        {
+            // Use ConfigureAwait(false) to avoid capturing the synchronization context and reduce the risk of deadlocks.
+            Task.Run(async () => await SetTextAsync(content, type, dataFormat).ConfigureAwait(false)).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
         /// Asynchronously sets the specified text content to the system clipboard in a given format.
         /// </summary>
         /// <param name="content">The text content to set in the clipboard.</param>
@@ -61,6 +76,22 @@ namespace FFF.Clipboard
         }
 
         /// <summary>
+        /// Synchronously retrieves text content from the system clipboard in a specified format. This method wraps
+        /// the asynchronous operation in a Task.Run to avoid deadlocks and waits for its completion.
+        /// It's designed for scenarios where asynchronous execution is not possible or desired, but should be used
+        /// with caution to avoid blocking the main thread in UI applications.
+        /// </summary>
+        /// <param name="dataFormat">The format of the text to be retrieved from the clipboard.</param>
+        /// <returns>The text content retrieved from the clipboard in the specified format.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when there is an error retrieving text from the clipboard.</exception>
+        public static string GetText(System.Windows.TextDataFormat dataFormat)
+        {
+            // Use ConfigureAwait(false) to avoid capturing the synchronization context and reduce the risk of deadlocks.
+            string result = Task.Run(async () => await GetTextAsync(dataFormat).ConfigureAwait(false)).GetAwaiter().GetResult();
+            return result;
+        }
+
+        /// <summary>
         /// Asynchronously retrieves text content from the system clipboard in a specified format.
         /// </summary>
         /// <param name="dataFormat">The format of the text to be retrieved from the clipboard.</param>
@@ -97,6 +128,19 @@ namespace FFF.Clipboard
             {
                 throw new InvalidOperationException($"Error retrieving text from clipboard: {ex.Message}", ex);
             }
+        }
+
+        /// <summary>
+        /// Clears the clipboard content synchronously. This method wraps the asynchronous clear operation in a Task.Run
+        /// to avoid deadlocks and waits for its completion. It's designed to be used in scenarios where asynchronous
+        /// execution is not possible or desired, but care should be taken to avoid blocking the main thread in UI applications.
+        /// </summary>
+        public static void Clear()
+        {
+            // Task.Run is used to offload the asynchronous operation to a thread pool thread.
+            // This avoids deadlock issues that might occur with .Wait() or .Result in a context with a synchronization context.
+            // GetAwaiter().GetResult() is used for waiting on the task's completion without throwing an AggregateException.
+            Task.Run(async () => await ClearAsync()).GetAwaiter().GetResult();
         }
 
         /// <summary>
