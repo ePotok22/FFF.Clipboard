@@ -2,11 +2,22 @@
 
 namespace FFF.Clipboard
 {
-    public enum TypeDataFormat : uint
+    /// <summary>
+    /// Represents the data format type.
+    /// </summary>
+    public enum TypeDataFormat : int
     {
+        /// <summary>
+        /// The data is in text format.
+        /// </summary>
         [Description("Text")]
-        Text = 1,
+        Text = 0,
+
+        /// <summary>
+        /// The data is in path format.
+        /// </summary>
         [Description("Path")]
-        Path = 2,
+        Path = 1,
     }
+
 }
