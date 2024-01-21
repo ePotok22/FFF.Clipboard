@@ -76,6 +76,6 @@ jobs:
       run: ls FFF.Clipboard.Tests/bin/Release/
 
     - name: Test
-      run: dotnet test FFF.Clipboard.Tests.csproj
+      run: dotnet test FFF.Clipboard/FFF.Clipboard.Tests.csproj
 
       
