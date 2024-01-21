@@ -76,7 +76,7 @@ jobs:
 
       - name: Install NUnit
         run: |
-          nuget install NUnit.Console -Version 3.16.1
+          nuget install NUnit.Console -Version 3.16.3
         shell: bash
         
       - name: Transform NUnit3 to JUnit
@@ -89,7 +89,7 @@ jobs:
         shell: pwsh
 
       - name: Publish report
-        uses: dorny/test-reporter@v1.4.2
+        uses: dorny/test-reporter@v1.7.0
         with:
           path: "*.xml"
           reporter: jest-junit
