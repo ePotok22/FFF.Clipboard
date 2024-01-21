@@ -42,7 +42,7 @@ jobs:
       uses: actions/download-artifact@v4.1.1
       with:
         name: FFF.Clipboard.Tests
-        path: TestResults     
+        path: artifact    
 
     - name: Delete test-dll artifact
       uses: geekyeggo/delete-artifact@v4.1.0
@@ -51,18 +51,11 @@ jobs:
          token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run tests
-      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./TestResults/FFF.Clipboard.Tests.dll --result TestResults.xml
-
-    - name: List
-      run: ls
-
-    - name: List
-      run: ls TestResults
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./artifact/FFF.Clipboard.Tests.dll --result TestResults.xml
           
     - name: Publish Test Report
       uses: actions/upload-artifact@v4.2.0
       if: success() || failure()
       with:
         name: test-results
-        path: TestResults/TestResult.xml
-        reporter: 'nunit'
+        path: ./TestResult.xml
