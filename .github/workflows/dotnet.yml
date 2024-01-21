@@ -55,13 +55,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4.1.1
 
-    - name: Setup MSBuild path
+    - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.3.1
-
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.2.0
 
     - name: Restore NuGet packages
       run: nuget restore FFF.Clipboard.sln
@@ -70,16 +67,10 @@ jobs:
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
 
     - name: Install NUnit.ConsoleRunner    
-      run: nuget install NUnit.ConsoleRunner -Version 3.13.0
-
-    - name: Print working directory
-      run: pwd
-      
-    - name: List files
-      run: ls packages
+      run: nuget install NUnit.ConsoleRunner -Version 3.16.3
       
     - name: Run tests
-      run: ./NUnit.ConsoleRunner.3.13.0/tools/nunit3-console.exe FFF.Clipboard.Test/bin/Release/FFF.Clipboard.Test.dll
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe FFF.Clipboard.Tests/bin/Release/FFF.Clipboard.Tests.dll
 
-
+          
       
