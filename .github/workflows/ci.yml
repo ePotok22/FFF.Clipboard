@@ -1,5 +1,4 @@
 name: CI
-
 on:
   push:
     branches: [ "master" ]
@@ -8,11 +7,11 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
 
-    steps:
-    - uses: actions/checkout@v4.1.1
+    steps:  
+    - name: Checkout 
+      uses: actions/checkout@v4.1.1
 
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.3.1
@@ -32,12 +31,12 @@ jobs:
 
       
   tests:
-    needs: build
-    
+    needs: build 
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4.1.1
+    - name: Checkout 
+      uses: actions/checkout@v4.1.1
     
     - name: Install NUnit.ConsoleRunner    
       run: nuget install NUnit.ConsoleRunner -Version 3.16.3
@@ -46,7 +45,10 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: FFF.Clipboard.Tests
- 
+
+    - name: List
+      run: ls -R
+      
     - name: Run tests
       run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./FFF.Clipboard.Tests.dll
    
