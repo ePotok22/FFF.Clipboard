@@ -64,4 +64,4 @@ jobs:
       if: success()
       with:
         name: test-results
-        path: artifact/TestResult.xml
+        path: ./artifact/TestResult.xml
