@@ -58,6 +58,9 @@ jobs:
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.2.0
 
+    - name: Setup NUnit.ConsoleRunner
+      uses: NuGet/NUnit.ConsoleRunner@v3.16.3
+
     - name: Restore NuGet packages
       run: nuget restore FFF.Clipboard.sln
 
@@ -65,5 +68,9 @@ jobs:
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
 
     - name: Run Tests
-      run: dotnet test FFF.Clipboard/FFF.Clipboard.Test.csproj --verbosity detailed
+      run: |
+        $testAssemblies = "**/FFF.Clipboard.Test.dll"
+        $results = "**/TestResults"
+        mkdir $results
+        $testAssemblies | Where-Object { $_ -notlike "*\\obj\\*" } | ForEach-Object { nunit3-console.exe $_ /Logger:"trx;LogFileName=$results/$(Split-Path $_ -Leaf).xml" }
       
