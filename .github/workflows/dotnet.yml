@@ -65,5 +65,5 @@ jobs:
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
 
     - name: Run Tests
-      run: dotnet test FFF.Clipboard/FFF.Clipboard.Test.csproj --no-restore --verbosity normal
+      run: dotnet test FFF.Clipboard/FFF.Clipboard.Test.csproj 
       
