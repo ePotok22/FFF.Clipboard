@@ -58,9 +58,6 @@ jobs:
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.2.0
 
-    - name: Setup VSTest
-      uses: darenm/Setup-VSTest@v1.2
-
     - name: Restore NuGet packages
       run: nuget restore FFF.Clipboard.sln
 
@@ -68,4 +65,9 @@ jobs:
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
 
     - name: Run tests
-      run: vstest.console.exe FFF.Clipboard\FFF.Clipboard.Test\bin\Release\FFF.Clipboard.Test.dll
+      run: |
+        $testAssemblies = "**/FFF.Clipboard.Test.dll"
+        $results = "**/TestResults"
+        mkdir $results
+        $testAssemblies | Where-Object { $_ -notlike "*\\obj\\*" } | ForEach-Object { dotnet vstest $_ /Logger:"trx;LogFileName=$results/$(Split-Path $_ -Leaf).xml" }
+      
