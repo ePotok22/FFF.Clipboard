@@ -66,8 +66,8 @@ jobs:
 
     - name: Run tests
       run: |
-        $testAssemblies = "FFF.Clipboard/FFF.Clipboard.Test/bin/Release/FFF.Clipboard.Test.dll"
-        $results = "FFF.Clipboard/FFF.Clipboard.Test/bin/Release/TestResults"
+        $testAssemblies = "FFF.Clipboard\FFF.Clipboard.Test\bin/Release\FFF.Clipboard.Test.dll"
+        $results = "FFF.Clipboard\FFF.Clipboard.Test\bin\Release\TestResults"
         mkdir $results
         $testAssemblies | Where-Object { $_ -notlike "*\\obj\\*" } | ForEach-Object { dotnet vstest $_ /Logger:"trx;LogFileName=$results/$(Split-Path $_ -Leaf).xml" }
       
