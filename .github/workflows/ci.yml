@@ -75,9 +75,7 @@ jobs:
         uses: actions/download-artifact@v4.1.1
         with:
           name: test-results   
-      
-      - name: kkkt
-        run: ls -R
+
       - name: Install NUnit
         run: |
           nuget install NUnit.Console -Version 3.16.1
@@ -93,6 +91,10 @@ jobs:
             $xslt.Transform($xml, $output);
           }
         shell: pwsh
+
+              
+      - name: kkkt
+        run: ls
 
       - uses: dorny/test-reporter@v1.4.2
         with:
