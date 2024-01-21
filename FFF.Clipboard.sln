@@ -5,6 +5,15 @@ VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFF.Clipboard", "FFF.Clipboard\FFF.Clipboard.csproj", "{0EA4918C-951A-4910-9168-EE69EDE42D5C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFF.Clipboard.Test", "FFF.Clipboard.Test\FFF.Clipboard.Test.csproj", "{779E0E07-BBE3-4B52-8D27-D6343112D029}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{4BC835FB-D2EB-4034-A2DB-0734AC61B261}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{4372A73A-AD20-454E-AB0A-50B0791D568E}"
+	ProjectSection(SolutionItems) = preProject
+		dotnet.yml = dotnet.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +24,16 @@ Global
 		{0EA4918C-951A-4910-9168-EE69EDE42D5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EA4918C-951A-4910-9168-EE69EDE42D5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EA4918C-951A-4910-9168-EE69EDE42D5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{779E0E07-BBE3-4B52-8D27-D6343112D029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{779E0E07-BBE3-4B52-8D27-D6343112D029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{779E0E07-BBE3-4B52-8D27-D6343112D029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{779E0E07-BBE3-4B52-8D27-D6343112D029}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4372A73A-AD20-454E-AB0A-50B0791D568E} = {4BC835FB-D2EB-4034-A2DB-0734AC61B261}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C369CB56-488E-46E7-A9EA-2E4B54D5638F}

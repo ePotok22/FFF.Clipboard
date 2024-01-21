@@ -68,8 +68,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClipboardManager.Meta.cs" />
+    <Compile Include="ClipboardManager.IClipboard.cs" />
     <Compile Include="ClipboardManager.cs" />
     <Compile Include="Helpers\DirectoryHelper.cs" />
+    <Compile Include="Interfaces\IClipboard.cs" />
+    <Compile Include="Interfaces\IFileDirectory.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Win32\RECT.cs" />
     <Compile Include="Win32\RasterOperations.cs" />

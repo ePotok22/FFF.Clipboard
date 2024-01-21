@@ -1,0 +1,31 @@
+name: .NET Framework CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup MSBuild path
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Restore NuGet packages
+      run: nuget restore YourSolution.sln
+
+    - name: Build
+      run: msbuild YourSolution.sln /p:Configuration=Release /m
+
+    - name: Run tests
+      run: |
+        $testAssemblies = "**/*Tests*.dll"
+        $results = "**/TestResults"
+        mkdir $results
+        $testAssemblies | Where-Object { $_ -notlike "*\\obj\\*" } | ForEach-Object { dotnet vstest $_ /Logger:"trx;LogFileName=$results/$(Split-Path $_ -Leaf).xml" }

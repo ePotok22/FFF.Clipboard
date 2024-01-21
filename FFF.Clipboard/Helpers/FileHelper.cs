@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using FFF.Interfaces;
 
 namespace FFF.Helpers
 {
-    internal static class FileHelper
+    internal class FileHelper : IFileDirectory
     {
         // Constant for the maximum path length
         private const int MaxPathLength = 259;
@@ -25,6 +25,9 @@ namespace FFF.Helpers
                 return false;
             }
         }
+
+        bool IFileDirectory.IsExists(string filePath) =>
+            IsExists(filePath);
 
         /// <summary>
         /// Resolves the file path to handle long paths.
