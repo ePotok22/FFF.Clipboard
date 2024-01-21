@@ -9,8 +9,8 @@
     <ProjectGuid>{779E0E07-BBE3-4B52-8D27-D6343112D029}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FFF.Clipboard.Test</RootNamespace>
-    <AssemblyName>FFF.Clipboard.Test</AssemblyName>
+    <RootNamespace>FFF.Clipboard.Tests</RootNamespace>
+    <AssemblyName>FFF.Clipboard.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
