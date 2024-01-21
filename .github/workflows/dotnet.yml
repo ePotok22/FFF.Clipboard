@@ -58,9 +58,6 @@ jobs:
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.2.0
 
-    - name: Setup NUnit.ConsoleRunner
-      uses: NuGet/NUnit.ConsoleRunner@v3.16.3
-
     - name: Restore NuGet packages
       run: nuget restore FFF.Clipboard.sln
 
