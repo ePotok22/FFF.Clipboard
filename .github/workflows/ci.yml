@@ -57,4 +57,4 @@ jobs:
       uses: geekyeggo/delete-artifact@v4
       with:
          name: FFF.Clipboard.Tests
-         token: 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
+         token: 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
