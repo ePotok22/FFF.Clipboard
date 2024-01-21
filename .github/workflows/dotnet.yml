@@ -55,7 +55,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4.1.1
+    - uses: actions/checkout@v2
 
     - name: Setup MSBuild path
       uses: microsoft/setup-msbuild@v1.3.1
@@ -72,7 +72,13 @@ jobs:
     - name: Install NUnit.ConsoleRunner    
       run: nuget install NUnit.ConsoleRunner -Version 3.16.3
 
+    - name: Print working directory
+      run: pwd
+    - name: List files
+      run: ls
+      
     - name: Run tests
-      run: dotnet test D:\a\Clipboard\Clipboard\FFF.Clipboard.Tests.csproj
+      run: dotnet test FFF.Clipboard.Tests/FFF.Clipboard.Tests.csproj
+
 
       
