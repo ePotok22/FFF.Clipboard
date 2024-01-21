@@ -50,10 +50,16 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@vv4.1.1
 
     - name: Setup MSBuild path
-      uses: microsoft/setup-msbuild@v1.0.2
+      uses: microsoft/setup-msbuild@v1.3.1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.2.0
+
+    - name: Setup VSTest
+      uses: darenm/Setup-VSTest@v1.2
 
     - name: Restore NuGet packages
       run: nuget restore FFF.Clipboard.sln
@@ -62,4 +68,4 @@ jobs:
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
 
     - name: Run tests
-      run: msbuild test FFF.Clipboard/FFF.Clipboard.Test.csproj
+      run: vstest.console.exe FFF.Clipboard\FFF.Clipboard.Test\bin\Release\FFF.Clipboard.Test.dll
