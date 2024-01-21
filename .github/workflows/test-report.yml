@@ -18,6 +18,6 @@ jobs:
       if: always()
       with:
         artifact: test-results           # artifact name
-        name: 'NUnit Test Results'        # Name of the check run which will be created
-        path: '*.xml'                     # Path to test results (inside artifact .zip)
-        reporter: 'nunit'              # Format of test results
+        name: 'NUnit Test Results'       # Name of the check run which will be created
+        path: '*.xml'                    # Path to test results (inside artifact .zip)
+        reporter: dotnet-trx             # Format of test results
