@@ -73,6 +73,7 @@ jobs:
         uses: actions/download-artifact@v4.1.1
         with:
           name: test-results   
+          path: ./report
 
       - name: Install NUnit
         run: |
@@ -81,8 +82,8 @@ jobs:
         
       - name: Transform NUnit3 to JUnit
         run: |
-          $xml = Resolve-Path "TestResults.xml" # Replace with your specific file name
-          $output = Join-Path ($pwd.Path) "Test-Results.xml" # Output file name
+          $xml = Resolve-Path "report/TestResults.xml" # Replace with your specific file name
+          $output = Join-Path ($pwd.Path) "report/Test-Results.xml" # Output file name
           $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
           $xslt.Load("nunit3-junit.xslt");
           $xslt.Transform($xml, $output);
@@ -91,5 +92,5 @@ jobs:
       - name: Publish report
         uses: dorny/test-reporter@v1.7.0
         with:
-          path: "*.xml"
+          path: "report/*.xml"
           reporter: jest-junit
