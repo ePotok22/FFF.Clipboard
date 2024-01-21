@@ -61,13 +61,14 @@ jobs:
     - name: Build Release
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
 
-    - name: Install NUnit.ConsoleRunner
-      run: dotnet tool install --global nunit.consolerunner --version 3.16.1
+    - name: Install NUnit.ConsoleRunner    
+      run: |
+        nuget install NUnit.ConsoleRunner -Version 3.16.1
       
     - name: Run Tests
-      run: |
+      run: | 
+        $nunitconsole = "NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe"
         $testAssemblies = "FFF.Clipboard/FFF.Clipboard.Test/bin/Release/FFF.Clipboard.Test.dll"
-        $results = "FFF.Clipboard/FFF.Clipboard.Test/bin/Release/TestResults"
+        $results = "FFF.Clipboard/FFF.Clipboard.Test/bin/Release/TestResults"       
         mkdir $results
-        $testAssemblies | Where-Object { $_ -notlike "*\\obj\\*" } | ForEach-Object { nunit3-console $_ /Logger:"trx;LogFileName=$results/$(Split-Path $_ -Leaf).xml" }
-      
+        $testAssemblies | Where-Object { $_ -notlike "*\\obj\\*" } | ForEach-Object { $nunitconsole $_ /Logger:"trx;LogFileName=$results/$(Split-Path $_ -Leaf).xml" }
