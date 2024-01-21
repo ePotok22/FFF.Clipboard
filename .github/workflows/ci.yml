@@ -51,7 +51,7 @@ jobs:
          token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run tests
-      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./artifact/FFF.Clipboard.Tests.dll --result TestResults.xml
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./artifact/FFF.Clipboard.Tests.dll --result artifact/TestResults.xml
       
     - name: List
       run: ls
@@ -64,4 +64,4 @@ jobs:
       if: success()
       with:
         name: test-results
-        path: ./TestResult.xml
+        path: artifact/TestResult.xml
