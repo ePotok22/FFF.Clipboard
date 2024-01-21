@@ -19,12 +19,34 @@ jobs:
      - name: Download test artifact
        uses: actions/download-artifact@v4.1.1
        with:
-         name: FFF.Clipboard.Tests
+         name: test-results
          path: report    
      
      - name: Install NUnit.Console
        run: |
           nuget install NUnit.Console -Version 3.12.0
        shell: bash
+
+     - name: Transform NUnit3 to JUnit
+       run: |
+          Get-ChildItem . -Filter test-results_*.xml | Foreach-Object {
+            $xml = Resolve-Path $_.FullName
+            $output = Join-Path ($pwd) ($_.BaseName + '_junit.xml')
+            $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
+            $xslt.Load("nunit3-junit.xslt");
+            $xslt.Transform($xml, $output);
+          }
+       shell: pwsh
+
+     - name: List
+       run: ls
+
+     - name: 'Publish test Report'
+       uses: dorny/test-reporter@v1.7.0
+       if: always()
+       with:
+         name: 'NUnit Test Results'       # Name of the check run which will be created
+         path: '*.xml'                    # Path to test results (inside artifact .zip)
+         reporter: jest-junit         # Format of test results
 
         
