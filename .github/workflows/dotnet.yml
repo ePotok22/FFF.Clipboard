@@ -59,6 +59,18 @@ jobs:
       with:
         name: test-results
         path: ./report
+    
+  reports:
+    needs: tests 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 
+      - uses: actions/checkout@v4.1.1
+
+      - name: Fetch transform code
+        run: |
+          wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
+        shell: bash
 
 
     
