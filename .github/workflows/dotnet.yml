@@ -71,7 +71,10 @@ jobs:
 
     - name: List build output
       run: ls FFF.Clipboard.Test/bin/Release/
+
+    - name: List build outputss
+      run: ls FFF.Clipboard.Test/bin/Debug/
       
     - name: Run tests
-      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe FFF.Clipboard.Test/bin/Release/FFF.Clipboard.Test.dll
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe FFF.Clipboard.Tests/bin/Release/FFF.Clipboard.Tests.dll
       
