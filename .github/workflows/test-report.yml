@@ -16,8 +16,14 @@ jobs:
           wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
        shell: bash
         
-     - name: Download test artifact
-       uses: actions/download-artifact@v4.1.1
+     - name: Get test results artifact
+       env:
+          DEBUG_GITHUB: ${{ toJSON(github.event) }}
+       uses: dawidd6/action-download-artifact@v2.14.0
+       with:
+          commit: ${{ github.workflow_run.head_sha }}
+          workflow_conclusion: completed
+          workflow: ci.yaml
        
      - name: List
        run: ls   
