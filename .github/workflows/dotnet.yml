@@ -60,6 +60,9 @@ jobs:
     - name: Setup MSBuild path
       uses: microsoft/setup-msbuild@v1.3.1
 
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.2.0
+
     - name: Restore NuGet packages
       run: nuget restore FFF.Clipboard.sln
 
@@ -71,9 +74,6 @@ jobs:
 
     - name: List build output
       run: ls FFF.Clipboard.Tests/bin/Release/
-
-    - name: List build outputss
-      run: ls FFF.Clipboard.Tests/bin/Debug/
 
     - name: Test
       run: dotnet test FFF.Clipboard.Tests.csproj
