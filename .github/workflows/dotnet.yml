@@ -40,30 +40,25 @@ name: .NET Framework CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ master ]
+    branches: [ "master" ]
 
 jobs:
-  build:
-
+  build-and-test:
     runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Setup MSBuild path
-      uses: microsoft/setup-msbuild@v1.0.2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '4.6.2' # specify your .NET Framework version
 
-    - name: Restore NuGet packages
-      run: nuget restore YourSolution.sln
-
-    - name: Build
-      run: msbuild YourSolution.sln /p:Configuration=Release /m
+    - name: Build with dotnet
+      run: dotnet build FFF.Clipboard.sln --configuration Release
 
     - name: Run tests
       run: |
-        $testAssemblies = "**/*Tests*.dll"
-        $results = "**/TestResults"
-        mkdir $results
-        $testAssemblies | Where-Object { $_ -notlike "*\\obj\\*" } | ForEach-Object { dotnet vstest $_ /Logger:"trx;LogFileName=$results/$(Split-Path $_ -Leaf).xml" }
+        dotnet test FFF.Clipboard/FFF.Clipboard.Test.csproj
