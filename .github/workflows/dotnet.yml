@@ -59,3 +59,44 @@ jobs:
       with:
         name: test-results
         path: ./report
+
+  reports:
+    needs: tests 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 
+      - uses: actions/checkout@v4.1.1
+
+      - name: Fetch transform code
+        run: |
+          wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
+        shell: bash
+
+      - name: Download test artifact
+        uses: actions/download-artifact@v4.1.1
+        with:
+          name: test-results   
+
+      - name: Install NUnit
+        run: |
+          nuget install NUnit.Console -Version 3.16.3
+        shell: bash
+
+      - name: Transform NUnit3 to JUnit
+        run: |
+          $xml = Resolve-Path "test-results.xml" # Replace with your specific file name
+          $output = Join-Path ($pwd.Path) "transformed_junit.xml" # Output file name
+          $xslt = New-Object System.Xml.Xsl.XslCompiledTransform
+          $xslt.Load("nunit3-junit.xslt")
+          $xslt.Transform($xml, $output)
+        shell: pwsh
+              
+      - name: kkkt
+        run: ls
+
+      - name: 'Publish test report'
+        uses: dorny/test-reporter@v1.7.0
+        with:
+          name: "NUnit tests"
+          path: "transformed_junit.xml"
+          reporter: jest-junit
