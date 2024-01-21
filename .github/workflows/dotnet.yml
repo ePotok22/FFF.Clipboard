@@ -55,9 +55,6 @@ jobs:
     - name: Setup MSBuild path
       uses: microsoft/setup-msbuild@v1.3.1
 
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.2.0
-
     - name: Restore NuGet packages
       run: nuget restore FFF.Clipboard.sln
 
@@ -65,7 +62,7 @@ jobs:
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
 
     - name: Install NUnit.ConsoleRunner
-      run: dotnet tool install --global NUnit.ConsoleRunner --version 3.16.3
+      run: dotnet tool install --global NUnit.ConsoleRunner --version 3.12.0
       
     - name: Run Tests
       run: |
