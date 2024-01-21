@@ -6,7 +6,7 @@ using System;
 using System.Windows;
 using System.Threading.Tasks;
 
-namespace FFF.Clipboard.Test
+namespace FFF.Clipboard.Tests
 {
     [TestFixture]
     public class ClipboardTests

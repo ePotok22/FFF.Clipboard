@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using System.Collections;
 
-namespace FFF.Clipboard.Test
+namespace FFF.Clipboard.Tests
 {
     internal class MyDataSources
     {

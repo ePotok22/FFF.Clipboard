@@ -3,7 +3,7 @@ using FFF.Interfaces;
 using Moq;
 using NUnit.Framework;
 
-namespace FFF.Clipboard.Test
+namespace FFF.Clipboard.Tests
 {
     // TestFixture attribute denotes a class that contains unit tests
     [TestFixture]
