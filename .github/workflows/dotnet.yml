@@ -45,7 +45,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build-and-test:
+  build:
 
     runs-on: windows-latest
 
@@ -62,13 +62,8 @@ jobs:
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
 
     - name: Install NUnit.ConsoleRunner    
-      run: |
-        nuget install NUnit.ConsoleRunner -Version 3.16.3
+      run: nuget install NUnit.ConsoleRunner -Version 3.16.3
       
     - name: Run Tests
-      run: | 
-        $nunitconsole = "NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe"
-        $testAssemblies = "FFF.Clipboard/FFF.Clipboard.Test/bin/Release/FFF.Clipboard.Test.dll"
-        $results = "FFF.Clipboard/FFF.Clipboard.Test/bin/Release/TestResults"       
-        mkdir $results
-        $testAssemblies | Where-Object { $_ -notlike "*\\obj\\*" } | ForEach-Object { $nunitconsole $_ /Logger:"trx;LogFileName=$results/$(Split-Path $_ -Leaf).xml" }
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe FFF.Clipboard/FFF.Clipboard.Test/bin/Release/FFF.Clipboard.Test.dll
+      
