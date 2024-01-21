@@ -52,3 +52,19 @@ jobs:
       with:
          name: FFF.Clipboard.Tests
          token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Fetch transform code
+      run: |
+          wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
+      shell: bash
+
+    - name: Transform NUnit3 to JUnit
+      run: |
+          Get-ChildItem . -Filter test-results_*.xml | Foreach-Object {
+            $xml = Resolve-Path $_.FullName
+            $output = Join-Path ($pwd) ($_.BaseName + '_junit.xml')
+            $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
+            $xslt.Load("nunit3-junit.xslt");
+            $xslt.Transform($xml, $output);
+          }
+      shell: pwsh
