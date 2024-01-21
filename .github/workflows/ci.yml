@@ -50,19 +50,8 @@ jobs:
          name: FFF.Clipboard.Tests
          token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Fetch transform code
-      run: |
-          wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
-      shell: bash
-        
     - name: Run tests
-      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./artifact/FFF.Clipboard.Tests.dll --result="report/nunit3-junit-testresults.xml;transform=report/nunit3-junit.xslt
-      
-    - name: List
-      run: ls
-
-    - name: Lista
-      run: ls artifact/report
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./artifact/FFF.Clipboard.Tests.dll --result ./report/TestResults.xml
           
     - name: Upload test-report artifact
       uses: actions/upload-artifact@v4.2.0
