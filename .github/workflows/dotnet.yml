@@ -4,7 +4,7 @@
 # documentation.
 
 # This workflow will build, test, sign and package a WPF or Windows Forms desktop application
-# built on .NET Core.
+# built on .NET Framework.
 # To learn how to migrate your existing application to .NET Core,
 # refer to https://docs.microsoft.com/en-us/dotnet/desktop-wpf/migration/convert-project-from-net-framework
 #
@@ -62,8 +62,4 @@ jobs:
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
 
     - name: Run tests
-      run: |
-        $testAssemblies = "**/*Tests*.dll"
-        $results = "**/TestResults"
-        mkdir $results
-        $testAssemblies | Where-Object { $_ -notlike "*\\obj\\*" } | ForEach-Object { dotnet vstest $_ /Logger:"trx;LogFileName=$results/$(Split-Path $_ -Leaf).xml" }
+      run: msbuild test FFF.Clipboard/FFF.Clipboard.Test.csproj
