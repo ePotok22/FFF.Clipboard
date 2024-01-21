@@ -4,21 +4,27 @@ on:
     workflows: ['CI']                     # runs after CI workflow
     types:
       - completed
-      
-permissions:
-  contents: read
-  actions: read
-  checks: write
   
 jobs:
   report:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
-    - name: 'Publish test Report'
-      uses: dorny/test-reporter@v1.7.0
-      if: always()
-      with:
-        artifact: test-results           # artifact name
-        name: 'NUnit Test Results'       # Name of the check run which will be created
-        path: '*.xml'                    # Path to test results (inside artifact .zip)
-        reporter: 'dotnet-nunit'         # Format of test results
+     - uses: actions/checkout@v2.3.4
+
+     - name: Fetch transform code
+       run: |
+          wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
+       shell: bash
+        
+     - name: Download test artifact
+       uses: actions/download-artifact@v4.1.1
+       with:
+         name: FFF.Clipboard.Tests
+         path: report    
+     
+     - name: Install NUnit.Console
+       run: |
+          nuget install NUnit.Console -Version 3.12.0
+       shell: bash
+
+        
