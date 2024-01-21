@@ -4,27 +4,57 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
 jobs:
   build:
     runs-on: windows-latest
-
     steps:  
     - name: Checkout 
       uses: actions/checkout@v4.1.1
-
+      
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.3.1
-
+      
     - name: Restore NuGet packages
       run: nuget restore FFF.Clipboard.sln
-
+      
     - name: Build Release
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
-
+      
     - name: Upload test artifact
       uses: actions/upload-artifact@v4.2.0
       if: success()     
       with:
         name: FFF.Clipboard.Tests
         path: FFF.Clipboard.Tests/bin/Release/
+      
+  tests:
+    needs: build 
+    runs-on: windows-latest
+
+    permissions:
+      contents: write
+      actions: write
+      checks: write
+
+    steps:
+    - name: Checkout 
+      uses: actions/checkout@v4.1.1
+    
+    - name: Install NUnit.ConsoleRunner    
+      run: nuget install NUnit.ConsoleRunner -Version 3.16.3
+    - name: Download test artifact
+      uses: actions/download-artifact@v4.1.1
+      with:
+        name: FFF.Clipboard.Tests
+        path: TestResults
+    - name: List
+      run: ls TestResults
+      
+    - name: Run tests
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./TestResults/FFF.Clipboard.Tests.dll
+   
+    - name: Delete test artifact
+      uses: geekyeggo/delete-artifact@v4.1.0
+      with:
+         name: FFF.Clipboard.Tests
+         token: ${{ secrets.DELETE_ARTIFACT }}
