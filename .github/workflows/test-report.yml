@@ -18,9 +18,9 @@ jobs:
         
      - name: Download test artifact
        uses: actions/download-artifact@v4.1.1
-       with:
-         name: test-results
-         path: report    
+       
+     - name: List
+       run: ls   
      
      - name: Install NUnit.Console
        run: |
