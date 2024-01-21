@@ -1,4 +1,3 @@
-
 name: CI
 
 on:
@@ -28,7 +27,7 @@ jobs:
       if: success()     
       with:
         name: test-dll
-        path: FFF.Clipboard/FFF.Clipboard.Tests/bin/Release/FFF.Clipboard.Tests.dll 
+        path: FFF.Clipboard.Tests/bin/Release/FFF.Clipboard.Tests.dll 
 
       
   tests:
