@@ -82,13 +82,15 @@ jobs:
           nuget install NUnit.Console -Version 3.16.3
         shell: bash
 
-      - name: Transform NUnit3 to JUnit
+       - name: Transform NUnit3 to JUnit
         run: |
-          $xml = Resolve-Path "test-results.xml" # Replace with your specific file name
-          $output = Join-Path ($pwd.Path) "transformed_junit.xml" # Output file name
-          $xslt = New-Object System.Xml.Xsl.XslCompiledTransform
-          $xslt.Load("nunit3-junit.xslt")
-          $xslt.Transform($xml, $output)
+          Get-ChildItem . -Filter test-results_*.xml | Foreach-Object {
+            $xml = Resolve-Path $_.FullName
+            $output = Join-Path ($pwd) ($_.BaseName + '_junit.xml')
+            $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
+            $xslt.Load("nunit3-junit.xslt");
+            $xslt.Transform($xml, $output);
+          }
         shell: pwsh
               
       - name: kkkt
