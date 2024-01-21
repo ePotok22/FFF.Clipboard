@@ -1,7 +1,7 @@
 name: 'Test Report'
 on:
   workflow_run:
-    workflows: ['Unit-Test']                     # runs after CI workflow
+    workflows: ['CI']                     # runs after CI workflow
     types:
       - completed
       
@@ -15,8 +15,9 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: dorny/test-reporter@v1.7.0
+      if: always()
       with:
-        artifact: test-results            # artifact name
-        name: .NET Tests                  # Name of the check run which will be created
+        artifact: test-results           # artifact name
+        name: 'NUnit Test Results'        # Name of the check run which will be created
         path: '*.xml'                     # Path to test results (inside artifact .zip)
-        reporter: dotnet-trx              # Format of test results
+        reporter: 'nunit'              # Format of test results
