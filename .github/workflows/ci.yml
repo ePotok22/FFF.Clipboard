@@ -46,11 +46,11 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: FFF.Clipboard.Tests
-        
+ 
+    - name: Run tests
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./FFF.Clipboard.Tests.dll
+   
     - name: Delete test artifact
       uses: geekyeggo/delete-artifact@v4
       with:
          name: FFF.Clipboard.Tests
- 
-    - name: Run tests
-      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./FFF.Clipboard.Tests.dll
