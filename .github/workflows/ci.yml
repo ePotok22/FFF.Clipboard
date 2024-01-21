@@ -49,7 +49,7 @@ jobs:
       run: ls -R 
       
     - name: Run tests
-      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe test.dll
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe FFF.Clipboard.Tests.dll
         
     - uses: geekyeggo/delete-artifact@v4
       with:
