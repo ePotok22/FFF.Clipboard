@@ -92,5 +92,6 @@ jobs:
       - name: Publish report
         uses: dorny/test-reporter@v1.7.0
         with:
+          name: "NUnit test results"
           path: "report/*.xml"
           reporter: jest-junit
