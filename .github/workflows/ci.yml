@@ -29,7 +29,7 @@ jobs:
 
     - name: Run tests
       run: |     
-        $nunitConsole = ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe
+        $nunitConsole = "./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe"
         mkdir $results
         $testAssemblies = "FFF.Clipboard/FFF.Clipboard.Test/bin/Release/FFF.Clipboard.Test.dll"
         $results = "FFF.Clipboard/FFF.Clipboard.Test/bin/Release/TestResults"
