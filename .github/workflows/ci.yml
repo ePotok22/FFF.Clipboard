@@ -28,16 +28,14 @@ jobs:
       run: nuget install NUnit.ConsoleRunner -Version 3.16.3
 
     - name: Run tests
-      run: |     
-        $testAssemblies = "FFF.Clipboard/FFF.Clipboard.Test/bin/Release/FFF.Clipboard.Test.dll"
-        $results = "TestResults"
-        mkdir $results
-        $testAssemblies | Where-Object { $_ -notlike "*\\obj\\*" } | ForEach-Object { ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe $_ /Logger:"trx;LogFileName=$results/$(Split-Path $_ -Leaf).xml" }
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe FFF.Clipboard/FFF.Clipboard.Test/bin/Release/FFF.Clipboard.Test.dll --logger "trx;LogFileName=test-results.trx"
         
     - name: List   
       run: ls 
       
   tests:
+    needs: build
+    
     runs-on: windows-latest
 
     steps:
