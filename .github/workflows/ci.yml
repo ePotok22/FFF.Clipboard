@@ -74,17 +74,10 @@ jobs:
       - name: Download test artifact
         uses: actions/download-artifact@v4.1.1
         with:
-          name: test-results
-          path: folder    
-
-      - name: Move files
-        run: |
-          for folder in test-results_*; do
-            mv "$folder/TestResult.xml" "$folder.xml"
-            rmdir "$folder"
-          done
-        shell: bash
-
+          name: test-results   
+      
+      - name: kkkt
+        run: ls -R
       - name: Install NUnit
         run: |
           nuget install NUnit.Console -Version 3.16.1
