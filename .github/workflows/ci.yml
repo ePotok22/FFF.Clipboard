@@ -51,17 +51,17 @@ jobs:
          token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run tests
-      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./artifact/FFF.Clipboard.Tests.dll --result artifact/TestResults.xml
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./artifact/FFF.Clipboard.Tests.dll --result artifact/report/TestResults.xml
       
     - name: List
       run: ls
 
     - name: Lista
-      run: ls artifact
+      run: ls artifact/report
           
     - name: Upload test-report artifact
       uses: actions/upload-artifact@v4.2.0
       if: success()
       with:
         name: test-results
-        path: ./artifact/TestResult.xml
+        path: ./artifact/report
