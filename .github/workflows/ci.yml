@@ -27,7 +27,7 @@ jobs:
       if: success()     
       with:
         name: FFF.Clipboard.Tests
-        path: FFF.Clipboard.Tests/bin/Release/FFF.Clipboard.Tests.dll 
+        path: FFF.Clipboard.Tests/bin/Release/
 
       
   tests:
@@ -45,12 +45,13 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: FFF.Clipboard.Tests
+        path: TestResults
 
     - name: List
-      run: ls -R
+      run: ls TestResults
       
     - name: Run tests
-      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./FFF.Clipboard.Tests.dll
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./TestResults/FFF.Clipboard.Tests.dll
    
     - name: Delete test artifact
       uses: geekyeggo/delete-artifact@v4
