@@ -30,7 +30,7 @@ jobs:
     - name: Run tests
       run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe FFF.Clipboard.Tests/bin/Release/FFF.Clipboard.Tests.dll
 
-    - uses: actions/upload-artifact@v4.2 
+    - uses: actions/upload-artifact@v4
       if: success() || failure()  
       with:
         name: test-results
