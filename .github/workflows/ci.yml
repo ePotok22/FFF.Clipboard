@@ -51,7 +51,7 @@ jobs:
          token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run tests
-      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./TestResults/FFF.Clipboard.Tests.dll
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./TestResults/FFF.Clipboard.Tests.dll --result TestResults.xml
           
     - name: Upload test-result artifact
       uses: actions/upload-artifact@v4.2.0
