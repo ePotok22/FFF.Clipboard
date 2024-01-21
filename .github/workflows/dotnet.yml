@@ -61,13 +61,9 @@ jobs:
     - name: Restore NuGet packages
       run: nuget restore FFF.Clipboard.sln
 
-    - name: Build
+    - name: Build Release
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
 
-    - name: Run tests
-      run: |
-        $testAssemblies = "FFF.Clipboard\FFF.Clipboard.Test\bin\Release\FFF.Clipboard.Test.dll"
-        $results = "FFF.Clipboard\FFF.Clipboard.Test\bin\Release\TestResults"
-        mkdir $results
-        $testAssemblies | Where-Object { $_ -notlike "*\\obj\\*" } | ForEach-Object { dotnet vstest $_ /Logger:"trx;LogFileName=$results/$(Split-Path $_ -Leaf).xml" }
+    - name: Run Tests
+      run: dotnet test FFF.Clipboard/FFF.Clipboard.Test.csproj --verbosity detailed
       
