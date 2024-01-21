@@ -73,5 +73,5 @@ jobs:
       run: ls FFF.Clipboard.Test/bin/Release/
       
     - name: Run tests
-      run: nunit3-console FFF.Clipboard.Test/bin/Release/FFF.Clipboard.Test.dll
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe FFF.Clipboard.Test/bin/Release/FFF.Clipboard.Test.dll
       
