@@ -67,10 +67,10 @@ jobs:
       run: msbuild FFF.Clipboard.sln /p:Configuration=Release /m
 
     - name: Install NUnit.ConsoleRunner    
-      run: nuget install NUnit.ConsoleRunner -Version 3.12.0
+      run: nuget install NUnit.ConsoleRunner -Version 3.16.3
       
     - name: Run tests
-      run: ./NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe FFF.Clipboard.Tests/bin/Release/FFF.Clipboard.Tests.dll
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe FFF.Clipboard.Tests/bin/Release/FFF.Clipboard.Tests.dll
 
           
       
