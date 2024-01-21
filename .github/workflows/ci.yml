@@ -62,4 +62,4 @@ jobs:
       uses: geekyeggo/delete-artifact@v4
       with:
          name: FFF.Clipboard.Tests
-         token: ${{ github.DELETE_ARTIFACT }}
+         token: ${{ secrets.DELETE_ARTIFACT }}
