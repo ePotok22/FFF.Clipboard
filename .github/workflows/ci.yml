@@ -59,7 +59,7 @@ jobs:
       run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./TestResults/FFF.Clipboard.Tests.dll
    
     - name: Delete test artifact
-      uses: geekyeggo/delete-artifact@v4.1
+      uses: geekyeggo/delete-artifact@v4.1.0
       with:
          name: FFF.Clipboard.Tests
          token: ${{ secrets.DELETE_ARTIFACT }}
