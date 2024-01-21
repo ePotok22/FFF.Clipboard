@@ -1,40 +1,51 @@
-name: 'Test Report'
+name: Test Report
+
 on:
   workflow_run:
-    workflows: ['CI']                     # runs after CI workflow
+    workflows:
+      - CI
     types:
       - completed
-  
+
 jobs:
   report:
     runs-on: ubuntu-latest
     steps:
-     - uses: actions/checkout@v3
+      - uses: actions/checkout@v2.3.4
 
-     - name: Fetch transform code
-       run: |
+      - name: Fetch transform code
+        run: |
           wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
-       shell: bash
-        
-     - name: Get test results artifact
-       env:
+        shell: bash
+
+      - name: Get test results artifact
+        env:
           DEBUG_GITHUB: ${{ toJSON(github.event) }}
-       uses: dawidd6/action-download-artifact@v2.14.0
-       with:
+        uses: dawidd6/action-download-artifact@v2.14.0
+        with:
+          # There's no support for selective download: it's either ALL artifacts or an exact file name, no pattern matching.
+          #  Would be easy to add to the [downloadArtifact method](https://github.com/actions/toolkit/blob/main/packages/artifact/src/internal/artifact-client.ts#L132) and thus expose to the action.
+          #  But I'm not motifcated enough to push that through right now.
+          # name: /test-results_(.*)/
           commit: ${{ github.workflow_run.head_sha }}
           workflow_conclusion: completed
           workflow: ci.yaml
-       
-     - name: List
-       run: ls   
-     
-     - name: Install NUnit.Console
-       run: |
-          nuget install NUnit.Console -Version 3.12.0
-       shell: bash
 
-     - name: Transform NUnit3 to JUnit
-       run: |
+      - name: Move files
+        run: |
+          for folder in test-results_*; do
+            mv "$folder/TestResult.xml" "$folder.xml"
+            rmdir "$folder"
+          done
+        shell: bash
+
+      - name: Install NUnit
+        run: |
+          nuget install NUnit.Console -Version 3.12.0
+        shell: bash
+
+      - name: Transform NUnit3 to JUnit
+        run: |
           Get-ChildItem . -Filter test-results_*.xml | Foreach-Object {
             $xml = Resolve-Path $_.FullName
             $output = Join-Path ($pwd) ($_.BaseName + '_junit.xml')
@@ -42,17 +53,10 @@ jobs:
             $xslt.Load("nunit3-junit.xslt");
             $xslt.Transform($xml, $output);
           }
-       shell: pwsh
+        shell: pwsh
 
-     - name: List
-       run: ls
-
-     - name: 'Publish test Report'
-       uses: dorny/test-reporter@v1.7.0
-       if: always()
-       with:
-         name: 'NUnit Test Results'       # Name of the check run which will be created
-         path: '*.xml'                    # Path to test results (inside artifact .zip)
-         reporter: jest-junit         # Format of test results
-
-        
+      - uses: dorny/test-reporter@v1.4.2
+        with:
+          name: "NUnit tests for $1"
+          path: "*_junit.xml"
+          reporter: jest-junit
