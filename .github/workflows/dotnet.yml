@@ -72,10 +72,7 @@ jobs:
     - name: Install NUnit.ConsoleRunner    
       run: nuget install NUnit.ConsoleRunner -Version 3.16.3
 
-    - name: List build output
-      run: ls FFF.Clipboard.Tests/bin/Release/
-
     - name: Test
-      run: dotnet test FFF.Clipboard/FFF.Clipboard.Tests.csproj
+      run: dotnet test ./FFF.Clipboard/FFF.Clipboard.Tests.csproj
 
       
