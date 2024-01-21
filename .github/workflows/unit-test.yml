@@ -1,0 +1,34 @@
+name: 'Unit-Test'
+on:
+  workflow_run:
+    workflows: ['CI']                     # runs after CI workflow
+    types:
+      - completed
+      
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout 
+      uses: actions/checkout@v4.1.1
+    
+    - name: Install NUnit.ConsoleRunner    
+      run: nuget install NUnit.ConsoleRunner -Version 3.16.3
+
+    - name: Download test artifact
+      uses: actions/download-artifact@v4.1.1
+      with:
+        name: FFF.Clipboard.Tests
+        path: TestResults
+
+    - name: List
+      run: ls TestResults
+      
+    - name: Run tests
+      run: ./NUnit.ConsoleRunner.3.16.3/tools/nunit3-console.exe ./TestResults/FFF.Clipboard.Tests.dll
+   
+    - name: Delete test artifact
+      uses: geekyeggo/delete-artifact@v4.1.0
+      with:
+         name: FFF.Clipboard.Tests
+         token: ${{ secrets.GITHUB_TOKEN }}
