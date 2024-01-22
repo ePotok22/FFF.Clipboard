@@ -9,15 +9,16 @@
 		<license type="expression">MIT</license>
 		<owners>FFF</owners>
 		<description>$description$</description>
-		<releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+		<releaseNotes>Optimize code</releaseNotes>
 		<copyright>$copyright$</copyright>
 		<tags>Clipboard</tags>
 		<dependencies>
-			<group targetFramework=".NETFramework4.8">
+			<group targetFramework=".NETFramework4.6.2">
 				<dependency id="System.IO.FileSystem.AccessControl" version="5.0.0"  exclude="Build,Analyzers"/>
-				<dependency id="System.IO.Abstractions" version="19.2.22" exclude="Build,Analyzers"/>
+				<dependency id="System.IO.Abstractions" version="20.0.4" exclude="Build,Analyzers"/>
 				<dependency id="System.Runtime.CompilerServices.Unsafe" version="6.0.0" exclude="Build,Analyzers"/>
 				<dependency id="System.Security.AccessControl" version="6.0.0" exclude="Build,Analyzers"/>
+				<dependency id="System.Threading.Tasks.Extensions" version="4.5.4" exclude="Build,Analyzers"/>
 			</group>
 		</dependencies>
 	</metadata>
