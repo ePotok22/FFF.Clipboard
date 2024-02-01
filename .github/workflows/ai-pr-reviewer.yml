@@ -5,10 +5,13 @@ permissions:
   pull-requests: write
 
 on:
+  push:
+    branches: [ "master" ]
   pull_request:
   pull_request_review_comment:
+    branches: [ "master" ]
     types: [created]
-
+    
 concurrency:
   group:
     ${{ github.repository }}-${{ github.event.number || github.head_ref ||
