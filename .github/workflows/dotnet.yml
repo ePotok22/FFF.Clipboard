@@ -90,7 +90,7 @@ jobs:
         shell: pwsh
 
       - name: Publish report
-        uses: dorny/test-reporter@v1.7.0
+        uses: dorny/test-reporter@v1.8.0
         with:
           name: "NUnit test results"
           path: "report/Transform-junit.xml"
