@@ -3,7 +3,7 @@ name: AI Commit Message
 on: [push]
 
 jobs:
-  ai_commit_message:
+  commit_message:
     runs-on: ubuntu-latest
     permissions:
       contents: write
