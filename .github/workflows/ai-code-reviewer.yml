@@ -1,25 +1,28 @@
-name: AI Code Reviewer
+name: Code Review
+
+permissions: write-all
 
 on:
-   push:
+  push:
     branches: [ "master" ]
-   pull_request:
-   pull_request_review_comment:
+  pull_request:
+  pull_request_review_comment:
     types: [created, opened, synchronize, reopened]
-      
-permissions: write-all
+    
+concurrency:
+  group:
+    ${{ github.repository }}-${{ github.event.number || github.head_ref ||
+    github.sha }}-${{ github.workflow }}-${{ github.event_name ==
+    'pull_request_review_comment' && 'pr_comment' || 'pr' }}
+  cancel-in-progress: ${{ github.event_name != 'pull_request_review_comment' }}
+
 jobs:
   review:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4.1.1
-
-      - name: AI Code Reviewer
-        uses: freeedcom/ai-codereviewer@v2.7.0
-        if: success()  
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # The GITHUB_TOKEN is there by default so you just need to keep it like it is and not necessarily need to add it as secret as it will throw an error. [More Details](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#about-the-github_token-secret)
+    steps:             
+       - uses: coderabbitai/ai-pr-reviewer@1.16.2
+         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_API_MODEL: "gpt-4" # Optional: defaults to "gpt-4"
-          exclude: "**/*.json, **/*.md" # Optional: exclude patterns separated by commas
+         with:
+          debug: false
