@@ -22,10 +22,11 @@ concurrency:
 jobs:
   review:
     runs-on: ubuntu-latest
-    steps:
-      - uses: coderabbitai/ai-pr-reviewer@v1.16.1
-        env:
+    steps:             
+       - name: AI-based PR Reviewer & Summarizer with Chat Capabilities             
+         uses: coderabbitai/ai-pr-reviewer@1.16.2
+         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        with:
+         with:
           debug: false
