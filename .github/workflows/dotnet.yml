@@ -83,15 +83,15 @@ jobs:
       - name: Transform NUnit3 to JUnit
         run: |
           $xml = Resolve-Path "report/TestResults.xml" # Replace with your specific file name
-          $output = Join-Path ($pwd.Path) "report/unit-test.xml" # Output file name
+          $output = Join-Path ($pwd.Path) "report/Transform-junit.xml" # Output file name
           $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
           $xslt.Load("nunit3-junit.xslt");
           $xslt.Transform($xml, $output);
         shell: pwsh
 
       - name: Publish report
-        uses: dorny/test-reporter@v1.8.0
+        uses: dorny/test-reporter@v1.7.0
         with:
           name: "NUnit test results"
-          path: "report/unit-test.xm"
+          path: "report/Transform-junit.xml"
           reporter: jest-junit
