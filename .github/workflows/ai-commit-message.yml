@@ -1,4 +1,4 @@
-name: AI Commit Message Generator
+name: AI Commit Message
 
 on: [push]
 
