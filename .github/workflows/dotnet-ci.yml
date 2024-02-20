@@ -62,7 +62,12 @@ jobs:
       - name: Install Transform Code
         run: |
           wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
-        
+
+      - name: Debug current directory
+        run: |
+             pwd
+             ls -alh
+      
       - name: Transform NUnit3 to JUnit
         run: |
           $xml = Resolve-Path "TestResults.xml" # Replace with your specific file name
@@ -70,11 +75,6 @@ jobs:
           $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
           $xslt.Load("nunit3-junit.xslt");
           $xslt.Transform($xml, $output);
-
-      - name: Debug current directory
-        run: |
-             pwd
-             ls -alh
 
       - name: Publish report
         uses: dorny/test-reporter@v1.8.0
