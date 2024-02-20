@@ -66,6 +66,7 @@ jobs:
           $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
           $xslt.Load("nunit3-junit.xslt");
           $xslt.Transform($xml, $output);
+        shell: bash
 
       - name: Publish report
         uses: dorny/test-reporter@v1.8.0
