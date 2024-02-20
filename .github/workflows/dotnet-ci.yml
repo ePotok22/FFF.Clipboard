@@ -47,12 +47,11 @@ jobs:
     needs: build-and-test 
     runs-on: ubuntu-latest
     steps:    
-      - uses: actions/checkout@v4.1.1
       - name: Download test artifact
         uses: actions/download-artifact@v4.1.1
         with:
           name: NUnit Test Results   
-          path: ./
+          path: .
 
       - name: Delete test artifact
         uses: geekyeggo/delete-artifact@v4.1.0
