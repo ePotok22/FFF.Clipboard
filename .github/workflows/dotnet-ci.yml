@@ -47,16 +47,16 @@ jobs:
     needs: build-and-test 
     runs-on: ubuntu-latest
     steps:     
+      - name: Fetch transform code
+        run: |
+          wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
+        shell: bash
+        
       - name: Download test artifact
         uses: actions/download-artifact@v4.1.1
         with:
           name: NUnit Test Results   
           path: ./report
-          
-      - name: Fetch transform code
-        run: |
-          wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
-        shell: bash
 
       - name: Install NUnit
         run: |
