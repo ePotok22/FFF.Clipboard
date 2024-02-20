@@ -1,0 +1,41 @@
+name: Build and Package
+
+# on:
+#   push:
+#     tags:
+#       - '*'
+
+on:
+  push:
+    branches: [ "master" ]
+    
+env:
+  SOLUTION_NAME: FFF.Clipboard
+  TEST_PROJECT_NAME: FFF.Clipboard.Tests
+
+jobs:
+  build-and-package:
+    runs-on:  windows-2019
+    steps:
+    - name: Checkout 
+      uses: actions/checkout@v4.1.1
+      
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1.3.1
+      
+    - name: Restore NuGet packages
+      run: nuget restore ${{ env.SOLUTION_NAME }}.sln
+      
+    - name: Build Release
+      run: msbuild ${{ env.SOLUTION_NAME }}.sln /p:Configuration=Release /m
+      
+    - name: Extract tag name
+      id: extract_version
+      run: echo "::set-output name=tag_version::${GITHUB_REF#refs/tags/v}"
+      
+    - name: Pack NuGet Package
+      run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.SOLUTION_NAME }}.csproj -Properties Configuration=Release -Version ${{ steps.extract_version.outputs.tag_version }}
+      
+    # - name: Push NuGet Package
+    #   run: nuget push *.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
+    #   if: success()
