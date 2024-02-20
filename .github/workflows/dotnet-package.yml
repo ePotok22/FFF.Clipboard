@@ -49,14 +49,12 @@ jobs:
     - name: Restore NuGet packages
       run: nuget restore ${{ env.SOLUTION_NAME }}.sln
       
-    # - name: Build Release
-    #   run: msbuild /p:Configuration=Release /p:GeneratePackageOnBuild=true ${{ env.SOLUTION_NAME }}.sln
     - name: Build Release
-      run: msbuild /p:Configuration=Release /p:GeneratePackageOnBuild=true /p:PackageOutputPath=./nupkg ${{ env.SOLUTION_NAME }}.sln
+      run: msbuild /p:Configuration=Release /p:GeneratePackageOnBuild=true ${{ env.SOLUTION_NAME }}.sln
 
-    # - name: Pack NuGet Package
-    #   run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ env.VERSION }}
-    #   shell: pwsh
+    - name: Pack NuGet Package
+      run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ env.VERSION }}
+      shell: pwsh
 
     - name: Upload Test Results
       uses: actions/upload-artifact@v4.3.1
