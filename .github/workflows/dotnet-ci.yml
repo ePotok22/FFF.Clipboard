@@ -51,7 +51,7 @@ jobs:
         uses: actions/download-artifact@v4.1.1
         with:
           name: NUnit Test Results   
-          path: .
+          path: ./report
 
       - name: Delete test artifact
         uses: geekyeggo/delete-artifact@v4.1.0
@@ -70,7 +70,7 @@ jobs:
       
       - name: Transform NUnit3 to JUnit
         run: |
-          $xml = Resolve-Path "./TestResults.xml" # Replace with your specific file name
+          $xml = Resolve-Path "report/TestResults.xml" # Replace with your specific file name
           $output = Join-Path ($pwd.Path) "${{ env.TEST_PROJECT_NAME }}.xml" # Output file name
           $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
           $xslt.Load("nunit3-junit.xslt");
@@ -80,5 +80,5 @@ jobs:
         uses: dorny/test-reporter@v1.8.0
         with:
           name: "test-reports"
-          path: ${{ env.TEST_PROJECT_NAME }}.xml
+          path: report/${{ env.TEST_PROJECT_NAME }}.xml
           reporter: jest-junit
