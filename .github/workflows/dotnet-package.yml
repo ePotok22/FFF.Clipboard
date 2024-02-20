@@ -53,16 +53,14 @@ jobs:
       run: msbuild /p:Configuration=Release /p:GeneratePackageOnBuild=true ${{ env.SOLUTION_NAME }}.sln
 
     - name: Pack NuGet Package
-      run: |
-        $version = if(Test-Path env:VERSION) { "${{ env.VERSION }}" } else { "${{ env.DEFAULT_VERSION }}" }
-        nuget pack ${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version $version
+      run: nuget pack ${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ env.VERSION }}
       shell: pwsh
 
     - name: Upload Test Results
       uses: actions/upload-artifact@v4.3.1
       with:
         name: Package
-        path: ${{ env.PROJECT_NAME }}.$version.nupkg
+        path: ${{ env.PROJECT_NAME }}.${{ env.VERSION }}.nupkg
       
     # - name: Pack NuGet Package
     #   run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ steps.extract_version.outputs.tag_version }}
