@@ -29,7 +29,7 @@ jobs:
       run: msbuild ${{ env.SOLUTION_NAME }}.sln /p:Configuration=Release /m
       
     - name: Upload test artifact
-      uses: actions/upload-artifact@v4.3.0
+      uses: actions/upload-artifact@v4.3.1
       if: success()     
       with:
         name: ${{ env.TEST_PROJECT_NAME }}
@@ -46,7 +46,7 @@ jobs:
       run: nuget install NUnit.ConsoleRunner -Version 3.16.3
       
     - name: Download test artifact
-      uses: actions/download-artifact@v4.1.1
+      uses: actions/download-artifact@v4.1.2
       with:
         name: ${{ env.TEST_PROJECT_NAME }}
         path: artifact    
@@ -67,20 +67,45 @@ jobs:
         name: test-results
         path: ./report
         
-  report:
+  reports:
     needs: tests 
     runs-on: ubuntu-latest
     steps:
-    - name: Create reporter
-      uses: dorny/test-reporter@v1.8.0
-      with:
-        artifact: test-results
-        name: "test-report"
-        path: '*.xml' 
-        reporter: dotnet-trx
+      - uses: actions/checkout@v4.1.1
+      - name: Fetch transform code
+        run: |
+          wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
+        shell: bash
+        
+      - name: Download test artifact
+        uses: actions/download-artifact@v4.1.2
+        with:
+          name: test-results   
+          path: ./report
 
-    - name: Delete test artifact
-      uses: geekyeggo/delete-artifact@v4.1.0
-      with:
-         name: test-results
-         token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Delete test artifact
+        uses: geekyeggo/delete-artifact@v4.1.0
+        with:
+           name: test-results
+           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install NUnit
+        run: |
+          nuget install NUnit.Console -Version 3.16.3
+        shell: bash
+        
+      - name: Transform NUnit3 to JUnit
+        run: |
+          $xml = Resolve-Path "report/TestResults.xml" # Replace with your specific file name
+          $output = Join-Path ($pwd.Path) "report/${{ env.TEST_PROJECT_NAME }}.xml" # Output file name
+          $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
+          $xslt.Load("nunit3-junit.xslt");
+          $xslt.Transform($xml, $output);
+        shell: pwsh
+
+      - name: Publish report
+        uses: dorny/test-reporter@v1.8.0
+        with:
+          name: "test-reports"
+          path: "report/${{ env.TEST_PROJECT_NAME }}.xml"
+          reporter: jest-junit
