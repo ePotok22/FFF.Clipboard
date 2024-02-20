@@ -47,8 +47,6 @@ jobs:
     needs: build-and-test 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.1
-     
       - name: Download test artifact
         uses: actions/download-artifact@v4.1.1
         with:
@@ -58,7 +56,6 @@ jobs:
       - name: Install Transform Code
         run: |
           wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
-        shell: bash
         
       - name: Transform NUnit3 to JUnit
         run: |
