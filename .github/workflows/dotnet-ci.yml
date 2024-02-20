@@ -53,8 +53,8 @@ jobs:
         name: NUnit Test Results
         path: ./report
 
-    - name: Install xsltproc
-      run: sudo apt-get update && sudo apt-get install -y xsltproc
+    - name: Download XSLT File
+      run: curl -o nunit3-junit.xslt https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
     
     - name: Transform NUnit3 to JUnit
       run: xsltproc -o junit-test-results.xml nunit3-junit.xslt ./report/TestResults.xml
