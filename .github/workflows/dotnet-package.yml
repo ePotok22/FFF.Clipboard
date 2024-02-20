@@ -22,11 +22,15 @@ jobs:
         echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
       shell: pwsh
 
-    - name: Update Assembly Version
+    - name: Update Assembly Version in AssemblyInfo.cs
+      if: ${{ env.VERSION }} != ''
       run: |
-        $path = "${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}/Properties/AssemblyInfo.cs"
-        (Get-Content $path) -replace 'AssemblyVersion\(".*"\)', 'AssemblyVersion("${{ env.VERSION }}")' | Set-Content $path
-        (Get-Content $path) -replace 'AssemblyFileVersion\(".*"\)', 'AssemblyFileVersion("${{ env.VERSION }}")' | Set-Content $path
+        $assemblyInfoPath = "./$env:PROJECT_NAME/Properties/AssemblyInfo.cs"
+        $version = "${{ env.VERSION }}"
+        $content = Get-Content $assemblyInfoPath -Raw
+        $content = $content -replace '\[assembly: AssemblyVersion\(".*"\)\]', "[assembly: AssemblyVersion(`"$version.0`")]"
+        $content = $content -replace '\[assembly: AssemblyFileVersion\(".*"\)\]', "[assembly: AssemblyFileVersion(`"$version.0`")]"
+        Set-Content $assemblyInfoPath -Value $content
       shell: pwsh
 
     # - name: Create Directory.Build.props with Version
