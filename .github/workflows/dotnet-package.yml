@@ -11,7 +11,7 @@ on:
     
 env:
   SOLUTION_NAME: FFF.Clipboard
-  TEST_PROJECT_NAME: FFF.Clipboard.Tests
+  PROJECT_NAME: FFF.Clipboard
 
 jobs:
   build-and-package:
@@ -27,7 +27,7 @@ jobs:
       run: nuget restore ${{ env.SOLUTION_NAME }}.sln
       
     - name: Build Release
-      run: msbuild ${{ env.SOLUTION_NAME }}.sln /p:Configuration=Release /m
+      run: msbuild /p:Configuration=Release /p:GeneratePackageOnBuild=true ${{ env.SOLUTION_NAME }.sln
       
     - name: Extract version from tag
       id: get_version
@@ -35,7 +35,7 @@ jobs:
       shell: pwsh
       
     - name: Pack NuGet Package
-      run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.SOLUTION_NAME }}.csproj -Properties Configuration=Release -Version ${{ steps.extract_version.outputs.tag_version }}
+      run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ steps.extract_version.outputs.tag_version }}
 
       # - name: Pack NuGet package
       # run: nuget pack FFF.Clipboard/FFF.Clipboard.csproj -Properties Configuration=Release -Version ${{ steps.get_version.outputs.VERSION }}
