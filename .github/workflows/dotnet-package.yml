@@ -61,11 +61,18 @@ jobs:
     #     nuget push "*.nupkg" -Source "GitHub"
     #   shell: pwsh
 
-    - name: Authenticate with GitHub Packages
+    # - name: Authenticate with GitHub Packages
+    #   run: |
+    #     $env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
+    #     $env:VSS_NUGET_EXTERNAL_FEED_ENDPOINTS = '{"endpointCredentials":[{"endpoint":"https://nuget.pkg.github.com/${{ github.actor }}","username":"${{ github.actor }}","password":"${{ secrets.GH_PACKAGES_TOKEN }}"}]}'
+    #     nuget sources Add -Name "GitHub" -Source "https://nuget.pkg.github.com/${{ env.GITHUB_ACCOUNT }}/index.json" -Username "${{ github.actor }}" -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+    #   shell: pwsh
+
+    - name: Configure NuGet for GitHub Packages
       run: |
         $env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
-        $env:VSS_NUGET_EXTERNAL_FEED_ENDPOINTS = '{"endpointCredentials":[{"endpoint":"https://nuget.pkg.github.com/${{ github.actor }}","username":"${{ github.actor }}","password":"${{ secrets.GH_PACKAGES_TOKEN }}"}]}'
-        nuget sources Add -Name "GitHub" -Source "https://nuget.pkg.github.com/${{ env.GITHUB_ACCOUNT }}/index.json" -Username "${{ github.actor }}" -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+        $env:VSS_NUGET_EXTERNAL_FEED_ENDPOINTS = '{"endpointCredentials":[{"endpoint":"https://nuget.pkg.github.com/ePotok22","username":"ePotok22","password":"${{ secrets.GH_PACKAGES_TOKEN }}"}]}'
+        nuget sources Add -Name "GitHub" -Source "https://nuget.pkg.github.com/ePotok22/index.json" -Username "ePotok22" -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
       shell: pwsh
 
     - name: Push Package to GitHub Packages
