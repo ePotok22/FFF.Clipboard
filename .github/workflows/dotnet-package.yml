@@ -1,9 +1,9 @@
-name: Build-Package-Publish
+name: 'Package'
 
 on:
   push:
     tags:
-      - '*'
+      - 'v*.*.*'
 env:
   SOLUTION_NAME: FFF.Clipboard
   PROJECT_NAME: FFF.Clipboard
