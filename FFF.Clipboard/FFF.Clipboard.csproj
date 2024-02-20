@@ -14,6 +14,7 @@
     <Deterministic>true</Deterministic>
     <Author>FangFooFong (FFF)</Author>
     <Description>Clipboard helper for easy to use</Description>
+    <RepositoryUrl>https://github.com/ePotok22/Clipboard/</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -86,9 +87,6 @@
     <None Include="app.config" />
     <None Include="FFF.Clipboard.nuspec" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="nuget.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
