@@ -1,13 +1,13 @@
 name: Build and Package
 
-# on:
-#   push:
-#     tags:
-#       - '*'
-
 on:
   push:
-    branches: [ "master" ]
+    tags:
+      - '*'
+
+# on:
+#   push:
+#     branches: [ "master" ]
     
 env:
   SOLUTION_NAME: FFF.Clipboard
