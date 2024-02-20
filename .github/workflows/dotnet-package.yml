@@ -14,7 +14,10 @@ jobs:
     steps:
     - name: Checkout 
       uses: actions/checkout@v4.1.1
-        
+
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1.3.1
+    
     - name: Extract Version from Tag
       if: startsWith(github.ref, 'refs/tags/v')
       run: |
@@ -22,29 +25,26 @@ jobs:
         echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
       shell: pwsh
 
-    - name: Update Assembly Version
+    # - name: Update Assembly Version
+    #   run: |
+    #     $path = "${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}/Properties/AssemblyInfo.cs"
+    #     (Get-Content $path) -replace 'AssemblyVersion\(".*"\)', 'AssemblyVersion("${{ env.VERSION }}")' | Set-Content $path
+    #     (Get-Content $path) -replace 'AssemblyFileVersion\(".*"\)', 'AssemblyFileVersion("${{ env.VERSION }}")' | Set-Content $path
+    #   shell: pwsh
+
+    - name: Create Directory.Build.props with Version
       run: |
-        $path = "${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}/Properties/AssemblyInfo.cs"
-        (Get-Content $path) -replace 'AssemblyVersion\(".*"\)', 'AssemblyVersion("${{ env.VERSION }}")' | Set-Content $path
-        (Get-Content $path) -replace 'AssemblyFileVersion\(".*"\)', 'AssemblyFileVersion("${{ env.VERSION }}")' | Set-Content $path
+          $content = @"
+          <Project>
+            <PropertyGroup>
+              <Version>${{ env.VERSION }}</Version>
+              <FileVersion>${{ env.VERSION }}</FileVersion>
+              <AssemblyVersion>${{ env.VERSION }}</AssemblyVersion>
+            </PropertyGroup>
+          </Project>
+          "@
+          $content | Out-File -FilePath "${{ github.workspace }}\Directory.Build.props"
       shell: pwsh
-
-      # - name: Create Directory.Build.props with Version
-      #   run: |
-      #     $content = @"
-      # <Project>
-      #   <PropertyGroup>
-      #     <Version>${{ env.VERSION }}</Version>
-      #     <FileVersion>${{ env.VERSION }}</FileVersion>
-      #     <AssemblyVersion>${{ env.VERSION }}</AssemblyVersion>
-      #   </PropertyGroup>
-      # </Project>
-      # "@
-      #     $content | Out-File -FilePath "${{ github.workspace }}\Directory.Build.props"
-      #   shell: pwsh
-
-    - name: Setup MSBuild Path
-      uses: microsoft/setup-msbuild@v1.3.1
       
     - name: Restore NuGet packages
       run: nuget restore ${{ env.SOLUTION_NAME }}.sln
