@@ -92,8 +92,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "Release" (
-cd $(ProjectDir)
-nuget pack $(ProjectFileName) -version 1.1.0 -Prop TargetFramework=net462 -Prop Configuration=Release -OutputDirectory "Bin")</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
