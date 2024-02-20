@@ -1,4 +1,4 @@
-name: Build and Package
+name: Build-Package-Publish
 
 on:
   push:
@@ -34,7 +34,7 @@ jobs:
 
     - name: Create Directory.Build.props with Version
       run: |
-          $content = @"
+          $propsContent = @"
           <Project>
             <PropertyGroup>
               <Version>${{ env.VERSION }}</Version>
@@ -43,18 +43,20 @@ jobs:
             </PropertyGroup>
           </Project>
           "@
-          $content | Out-File -FilePath "${{ github.workspace }}\Directory.Build.props"
+          $propsContent | Out-File -FilePath "${{ github.workspace }}/Directory.Build.props"
       shell: pwsh
       
     - name: Restore NuGet packages
-      run: nuget restore ${{ env.SOLUTION_NAME }}.sln
+      run: msbuild /t:restore ${{ env.SOLUTION_NAME }}.sln
       
     - name: Build Release
       run: msbuild /p:Configuration=Release /p:GeneratePackageOnBuild=true ${{ env.SOLUTION_NAME }}.sln
 
     - name: Pack NuGet Package
-      run: nuget pack ${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ env.VERSION }}
-      shell: pwsh
+      run: nuget pack ${{ env.PROJECT_PATH }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      # run: nuget pack ${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ env.VERSION }}
+      # shell: pwsh
 
     - name: Upload Test Results
       uses: actions/upload-artifact@v4.3.1
