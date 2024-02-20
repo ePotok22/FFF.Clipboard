@@ -24,7 +24,7 @@ jobs:
 
     - name: Update Assembly Version
       run: |
-        $path = "${{ github.workspace }}\${{ env.PROJECT_NAME }}\${{ env.PROJECT_NAME }}\Properties\AssemblyInfo.cs"
+        $path = "{{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}/Properties/AssemblyInfo.cs"
         (Get-Content $path) -replace 'AssemblyVersion\(".*"\)', 'AssemblyVersion("${{ env.VERSION }}")' | Set-Content $path
         (Get-Content $path) -replace 'AssemblyFileVersion\(".*"\)', 'AssemblyFileVersion("${{ env.VERSION }}")' | Set-Content $path
       shell: pwsh
