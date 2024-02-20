@@ -38,7 +38,7 @@ jobs:
       working-directory: .
       
     - name: Upload Test Results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4.3.1
       with:
         name: NUnit Test Results
         path: TestResults.xml
@@ -48,18 +48,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Download Test Results
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4.1.2
       with:
         name: NUnit Test Results
         path: ./report
 
-    - name: Install xsltproc
-      run: sudo apt-get install -y xsltproc
+    - name: Download XSLT File
+      run: |
+        curl -o nunit3-junit.xslt https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
 
     - name: Transform NUnit3 to JUnit
       run: |
-        xsltproc -o junit-test-results.xml https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt ./report/TestResults.xml
-
+        xsltproc -o junit-test-results.xml nunit3-junit.xslt ./report/TestResults.xml
+    
     - name: Publish JUnit Test Results
       uses: dorny/test-reporter@v1.8.0
       with:
