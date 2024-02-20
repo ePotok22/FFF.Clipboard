@@ -88,6 +88,6 @@ jobs:
         nuget sources Add -Name "GitHub" -Source "https://nuget.pkg.github.com/${{ github.actor }}/index.json" -Username $username -Password $password
         
         # Push the package to GitHub Packages
-        nuget push "*.nupkg" -Source "GitHub" -ApiKey ${{ secrets.GH_PACKAGES_TOKEN }}   
+        nuget push "*.nupkg" -Source "GitHub" -ApiKey $password   
       shell: pwsh
 
