@@ -20,6 +20,11 @@ jobs:
     - name: Checkout 
       uses: actions/checkout@v4.1.1
       
+    - name: Extract version from tag
+      id: get_version
+      run: echo "::set-output name=VERSION::$(echo ${GITHUB_REF#refs/tags/v})"
+      shell: pwsh
+      
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.3.1
       
@@ -27,12 +32,8 @@ jobs:
       run: nuget restore ${{ env.SOLUTION_NAME }}.sln
       
     - name: Build Release
-      run: msbuild /p:Configuration=Release /p:GeneratePackageOnBuild=true ${{ env.SOLUTION_NAME }.sln
+      run: msbuild /p:Configuration=Release /p:GeneratePackageOnBuild=true ${{ env.SOLUTION_NAME }}.sln
       
-    - name: Extract version from tag
-      id: get_version
-      run: echo "::set-output name=VERSION::$(echo ${GITHUB_REF#refs/tags/v})"
-      shell: pwsh
       
     - name: Pack NuGet Package
       run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ steps.extract_version.outputs.tag_version }}
