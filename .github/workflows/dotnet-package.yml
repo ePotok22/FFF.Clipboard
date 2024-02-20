@@ -52,7 +52,7 @@ jobs:
 
 
     - name: Configure NuGet Source and Push Package
-    - run: |
+      run: |
           $Env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
           $feedEndpoint = "https://nuget.pkg.github.com/${{ github.actor }}/index.json"
           $username = "${{ github.actor }}"
