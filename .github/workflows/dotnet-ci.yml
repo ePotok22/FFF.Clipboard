@@ -51,6 +51,12 @@ jobs:
         with:
           name: NUnit Test Results   
           path: .
+
+      - name: Delete test artifact
+        uses: geekyeggo/delete-artifact@v4.1.0
+        with:
+          name: NUnit Test Results 
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Install Transform Code
         run: |
