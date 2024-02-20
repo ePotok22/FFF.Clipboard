@@ -29,13 +29,17 @@ jobs:
     - name: Build Release
       run: msbuild ${{ env.SOLUTION_NAME }}.sln /p:Configuration=Release /m
       
-    - name: Extract tag name
-      id: extract_version
-      run: echo "::set-output name=tag_version::${GITHUB_REF#refs/tags/v}"
+    - name: Extract version from tag
+      id: get_version
+      run: echo "::set-output name=VERSION::$(echo ${GITHUB_REF#refs/tags/v})"
+      shell: pwsh
       
     - name: Pack NuGet Package
       run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.SOLUTION_NAME }}.csproj -Properties Configuration=Release -Version ${{ steps.extract_version.outputs.tag_version }}
-      
+
+      # - name: Pack NuGet package
+      # run: nuget pack FFF.Clipboard/FFF.Clipboard.csproj -Properties Configuration=Release -Version ${{ steps.get_version.outputs.VERSION }}
+      # shell: pwsh
     # - name: Push NuGet Package
     #   run: nuget push *.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
     #   if: success()
