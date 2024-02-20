@@ -53,20 +53,21 @@ jobs:
         name: NUnit Test Results
         path: ./report
 
-    - name: Download XSLT File
-      run: curl -o nunit3-junit.xslt https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
+    - name: Download Transform Code
+      run: |
+          wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
     
     - name: Transform NUnit3 to JUnit
       run: |
           $xml = Resolve-Path "report/TestResults.xml" # Replace with your specific file name
-          $output = Join-Path ($pwd.Path) "${{ env.TEST_PROJECT_NAME }}.xml" # Output file name
+          $output = Join-Path ($pwd.Path) "report/${{ env.TEST_PROJECT_NAME }}.xml" # Output file name
           $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
           $xslt.Load("nunit3-junit.xslt");
           $xslt.Transform($xml, $output);
 
-    - name: Publish JUnit Test Results
+    - name: Publish report
       uses: dorny/test-reporter@v1.8.0
       with:
-        name: "JUnit Test Results"
-        path: "{{ env.TEST_PROJECT_NAME }}.xml"
-        reporter: jest-junit
+          name: "test-reports"
+          path: "report/${{ env.TEST_PROJECT_NAME }}.xml"
+          reporter: jest-junit
