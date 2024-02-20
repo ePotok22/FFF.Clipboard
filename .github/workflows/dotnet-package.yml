@@ -33,20 +33,6 @@ jobs:
         Set-Content $assemblyInfoPath -Value $content
       shell: pwsh
 
-    # - name: Create Directory.Build.props with Version
-    #   run: |
-    #       $propsContent = @"
-    #       <Project>
-    #         <PropertyGroup>
-    #           <Version>${{ env.VERSION }}</Version>
-    #           <FileVersion>${{ env.VERSION }}</FileVersion>
-    #           <AssemblyVersion>${{ env.VERSION }}</AssemblyVersion>
-    #         </PropertyGroup>
-    #       </Project>
-    #       "@
-    #       $propsContent | Out-File -FilePath "./Directory.Build.props"
-    #   shell: pwsh  
-
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.3.1
       
@@ -60,18 +46,6 @@ jobs:
       run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ env.VERSION }}
       shell: pwsh
 
-    - name: Upload Test Results
-      uses: actions/upload-artifact@v4.3.1
-      with:
-        name: Package
-        path: ${{ env.PROJECT_NAME }}.${{ env.VERSION }}.nupkg
-      
-    # - name: Pack NuGet Package
-    #   run: nuget pack ./${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ steps.extract_version.outputs.tag_version }}
-
-      # - name: Pack NuGet package
-      # run: nuget pack FFF.Clipboard/FFF.Clipboard.csproj -Properties Configuration=Release -Version ${{ steps.get_version.outputs.VERSION }}
-      # shell: pwsh
-    # - name: Push NuGet Package
-    #   run: nuget push *.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
-    #   if: success()
+    - name: Push NuGet Package
+      run: nuget push *.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
+      if: success()
