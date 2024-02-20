@@ -54,11 +54,17 @@ jobs:
         with:
           name: NUnit Test Results   
           path: .
+
+      - name: Delete test artifact
+        uses: geekyeggo/delete-artifact@v4.1.0
+        with:
+          name: NUnit Test Results 
+          token: ${{ secrets.GITHUB_TOKEN }}   
       
       - name: Install Transform Code
         run: |
           wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
-        shell: bash
+
         
       - name: Transform NUnit3 to JUnit
         run: |
@@ -67,7 +73,6 @@ jobs:
           $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
           $xslt.Load("nunit3-junit.xslt");
           $xslt.Transform($xml, $output);
-        shell: pwsh
 
       - name: Publish report
         uses: dorny/test-reporter@v1.8.0
