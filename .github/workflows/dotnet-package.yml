@@ -1,14 +1,9 @@
-name: Build and Package
+name: 'Package'
 
 on:
   push:
     tags:
-      - '*'
-
-# on:
-#   push:
-#     branches: [ "master" ]
-    
+      - 'v*.*.*'
 env:
   SOLUTION_NAME: FFF.Clipboard
   PROJECT_NAME: FFF.Clipboard
@@ -19,12 +14,25 @@ jobs:
     steps:
     - name: Checkout 
       uses: actions/checkout@v4.1.1
-      
-    - name: Extract version from tag
-      id: get_version
-      run: echo "::set-output name=VERSION::$(echo ${GITHUB_REF#refs/tags/v})"
+    
+    - name: Extract Version from Tag
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        $version = "${{ github.ref }}".Substring("${{ github.ref }}".LastIndexOf('/') + 1).Trim('v')
+        echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
       shell: pwsh
-      
+
+    - name: Update Assembly Version in AssemblyInfo.cs
+      if: ${{ env.VERSION }} != ''
+      run: |
+        $assemblyInfoPath = "./$env:PROJECT_NAME/Properties/AssemblyInfo.cs"
+        $version = "${{ env.VERSION }}"
+        $content = Get-Content $assemblyInfoPath -Raw
+        $content = $content -replace '\[assembly: AssemblyVersion\(".*"\)\]', "[assembly: AssemblyVersion(`"$version.0`")]"
+        $content = $content -replace '\[assembly: AssemblyFileVersion\(".*"\)\]', "[assembly: AssemblyFileVersion(`"$version.0`")]"
+        Set-Content $assemblyInfoPath -Value $content
+      shell: pwsh
+
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.3.1
       
@@ -33,14 +41,51 @@ jobs:
       
     - name: Build Release
       run: msbuild /p:Configuration=Release /p:GeneratePackageOnBuild=true ${{ env.SOLUTION_NAME }}.sln
-      
-      
-    - name: Pack NuGet Package
-      run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ steps.extract_version.outputs.tag_version }}
 
-      # - name: Pack NuGet package
-      # run: nuget pack FFF.Clipboard/FFF.Clipboard.csproj -Properties Configuration=Release -Version ${{ steps.get_version.outputs.VERSION }}
-      # shell: pwsh
-    # - name: Push NuGet Package
-    #   run: nuget push *.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
+    - name: Pack NuGet Package
+      run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ env.VERSION }}
+      shell: pwsh
+
+    # - name: Push Package Into NuGet
+    #   run: nuget push *.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json 
     #   if: success()
+
+
+    - name: Configure NuGet Source and Push Package
+      run: |
+          $Env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
+          $feedEndpoint = "https://nuget.pkg.github.com/${{ github.actor }}/index.json"
+          $username = "${{ github.actor }}"
+          $password = "${{ secrets.GH_PACKAGES_PAT }}" # Use the GitHub PAT stored as a secret
+          
+          # Add the NuGet source with authentication
+          nuget sources Add -Name "GitHub" -Source $feedEndpoint -Username $username -Password $password
+          
+          # Push the package to GitHub Packages
+          nuget push "*.nupkg" -Source "GitHub" -ApiKey $password
+      shell: pwsh
+      
+    # - name: Push Package Into GitHub
+    #   run: |
+    #     nuget sources Add -Name "GitHub" -Source https://nuget.pkg.github.com/${{ github.actor }}/index.json -Username ${{ github.actor }} -Password ${{ secrets.GH_PACKAGES_PAT }} 
+    #     nuget push "*.nupkg" -Source "GitHub" -ApiKey ${{ secrets.GH_PACKAGES_PAT }} -Source "GitHub"
+    #   shell: pwsh
+
+    # - name: Authenticate with GitHub Packages
+    #   run: |
+    #     $env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
+    #     $env:VSS_NUGET_EXTERNAL_FEED_ENDPOINTS = '{"endpointCredentials":[{"endpoint":"https://nuget.pkg.github.com/${{ github.actor }}","username":"${{ github.actor }}","password":"${{ secrets.GH_PACKAGES_TOKEN }}"}]}'
+    #     nuget sources Add -Name "GitHub" -Source "https://nuget.pkg.github.com/${{ env.GITHUB_ACCOUNT }}/index.json" -Username "${{ github.actor }}" -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+    #   shell: pwsh
+
+    # - name: Configure NuGet for GitHub Packages
+    #   run: |
+    #     $env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
+    #     $env:VSS_NUGET_EXTERNAL_FEED_ENDPOINTS = '{"endpointCredentials":[{"endpoint":"https://nuget.pkg.github.com/ePotok22","username":"ePotok22","password":"${{ secrets.GH_PACKAGES_TOKEN }}"}]}'
+    #     nuget sources Add -Name "GitHub" -Source "https://nuget.pkg.github.com/ePotok22/index.json" -Username "ePotok22" -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
+    #   shell: pwsh
+
+    # - name: Push Package to GitHub Packages
+    #   run: |
+    #     nuget push "*.nupkg" -Source "GitHub" -ApiKey "${{ secrets.GH_PACKAGES_TOKEN }}"
+    #   shell: pwsh
