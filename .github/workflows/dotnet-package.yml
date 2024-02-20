@@ -55,12 +55,9 @@ jobs:
     #   run: nuget push *.nupkg -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source https://nuget.pkg.github.com/epotok22/index.json
     #   if: success()
 
-    - name: Set up NuGet for GitHub Packages
+    - name: Push Package Into GitHub
       run: |
         nuget sources Add -Name "GitHub" -Source https://nuget.pkg.github.com/${{ env.GITHUB_ACCOUNT }}/index.json -Username ${{ env.GITHUB_ACCOUNT }} -Password ${{ secrets.GH_PACKAGES_TOKEN }}
         nuget setapikey ${{ secrets.GH_PACKAGES_TOKEN }} -Source "GitHub"
-      shell: pwsh
-    
-    - name: Push Package Into GitHub
-      run: nuget push "*.nupkg" -Source "GitHub"
+        nuget push "*.nupkg" -Source "GitHub"
       shell: pwsh
