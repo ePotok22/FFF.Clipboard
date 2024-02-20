@@ -53,13 +53,11 @@ jobs:
         name: NUnit Test Results
         path: ./report
 
-    - name: Download XSLT File
-      run: |
-        curl -o nunit3-junit.xslt https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
-
+    - name: Install xsltproc
+      run: sudo apt-get update && sudo apt-get install -y xsltproc
+    
     - name: Transform NUnit3 to JUnit
-      run: |
-        xsltproc -o junit-test-results.xml nunit3-junit.xslt ./report/TestResults.xml
+      run: xsltproc -o junit-test-results.xml nunit3-junit.xslt ./report/TestResults.xml
     
     - name: Publish JUnit Test Results
       uses: dorny/test-reporter@v1.8.0
