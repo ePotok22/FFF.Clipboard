@@ -11,6 +11,11 @@ env:
 jobs:
   build-and-package:
     runs-on:  windows-2019
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+      
     steps:
     - name: Checkout 
       uses: actions/checkout@v4.1.1
@@ -51,19 +56,19 @@ jobs:
     #   if: success()
 
 
-    - name: Configure NuGet Source and Push Package
-      run: |
-          $Env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
-          $feedEndpoint = "https://nuget.pkg.github.com/${{ github.actor }}/index.json"
-          $username = "${{ github.actor }}"
-          $password = "${{ secrets.GH_PACKAGES_PAT }}" # Use the GitHub PAT stored as a secret
+    # - name: Configure NuGet Source and Push Package
+    #   run: |
+    #       $env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
+    #       $feedEndpoint = "https://nuget.pkg.github.com/${{ github.actor }}/index.json"
+    #       $username = "${{ github.actor }}"
+    #       $password = "${{ secrets.GH_PACKAGES_PAT }}" # Use the GitHub PAT stored as a secret
           
-          # Add the NuGet source with authentication
-          nuget sources Add -Name "GitHub" -Source $feedEndpoint -Username $username -Password $password
+    #       # Add the NuGet source with authentication
+    #       nuget sources Add -Name "GitHub" -Source $feedEndpoint -Username $username -Password $password
           
-          # Push the package to GitHub Packages
-          nuget push "*.nupkg" -Source "GitHub" -ApiKey $password
-      shell: pwsh
+    #       # Push the package to GitHub Packages
+    #       nuget push "*.nupkg" -Source "GitHub" -ApiKey $password
+    #   shell: pwsh
       
     # - name: Push Package Into GitHub
     #   run: |
@@ -71,12 +76,12 @@ jobs:
     #     nuget push "*.nupkg" -Source "GitHub" -ApiKey ${{ secrets.GH_PACKAGES_PAT }} -Source "GitHub"
     #   shell: pwsh
 
-    # - name: Authenticate with GitHub Packages
-    #   run: |
-    #     $env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
-    #     $env:VSS_NUGET_EXTERNAL_FEED_ENDPOINTS = '{"endpointCredentials":[{"endpoint":"https://nuget.pkg.github.com/${{ github.actor }}","username":"${{ github.actor }}","password":"${{ secrets.GH_PACKAGES_TOKEN }}"}]}'
-    #     nuget sources Add -Name "GitHub" -Source "https://nuget.pkg.github.com/${{ env.GITHUB_ACCOUNT }}/index.json" -Username "${{ github.actor }}" -Password "${{ secrets.GH_PACKAGES_TOKEN }}"
-    #   shell: pwsh
+    - name: Authenticate with GitHub Packages
+      run: |
+        $env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
+        $env:VSS_NUGET_EXTERNAL_FEED_ENDPOINTS = '{"endpointCredentials":[{"endpoint":"https://nuget.pkg.github.com/${{ github.actor }}","username":"${{ github.actor }}","password":"${{ secrets.GH_PACKAGES_PAT }}"}]}'
+        nuget sources Add -Name "GitHub" -Source "https://nuget.pkg.github.com/${{ env.GITHUB_ACCOUNT }}/index.json" -Username "${{ github.actor }}" -Password "${{ secrets.GH_PACKAGES_PAT }}"
+      shell: pwsh
 
     # - name: Configure NuGet for GitHub Packages
     #   run: |
