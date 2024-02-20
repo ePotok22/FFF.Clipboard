@@ -79,7 +79,7 @@ jobs:
     - name: Push Package Into GitHub
       run: |
         $username = "${{ github.actor }}"
-        $password = "${{ secrets.GH_PACKAGES_PAT }}" 
+        $password = "${{ secrets.GITHUB_TOKEN }}" 
         $feedEndpoint = "https://nuget.pkg.github.com/${{ github.actor }}/index.json"
         $env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
         $env:VSS_NUGET_EXTERNAL_FEED_ENDPOINTS = '{"endpointCredentials":[{"endpoint": $feedEndpoint,"username":$username,"password": $password}]}'
