@@ -4,11 +4,6 @@ on:
   push:
     tags:
       - '*'
-
-# on:
-#   push:
-#     branches: [ "master" ]
-    
 env:
   SOLUTION_NAME: FFF.Clipboard
   PROJECT_NAME: FFF.Clipboard
@@ -20,11 +15,11 @@ jobs:
     - name: Checkout 
       uses: actions/checkout@v4.1.1
       
-    - name: Extract version from tag
-      id: get_version
-      run: echo "::set-output name=VERSION::$(echo ${GITHUB_REF#refs/tags/v})"
-      shell: pwsh
-      
+    # - name: Extract version from tag
+    #   id: get_version
+    #   run: echo "::set-output name=VERSION::$(echo ${GITHUB_REF#refs/tags/v})"
+    #   shell: pwsh
+
     - name: Setup MSBuild Path
       uses: microsoft/setup-msbuild@v1.3.1
       
@@ -33,10 +28,24 @@ jobs:
       
     - name: Build Release
       run: msbuild /p:Configuration=Release /p:GeneratePackageOnBuild=true ${{ env.SOLUTION_NAME }}.sln
-      
-      
+
+    - name: Extract Version from Tag
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        $version = "${{ github.ref }}".Substring("${{ github.ref }}".LastIndexOf('/') + 1).Trim('v')
+        echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+      shell: pwsh
+
     - name: Pack NuGet Package
-      run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ steps.extract_version.outputs.tag_version }}
+      run: |
+        $version = if(Test-Path env:VERSION) { "${{ env.VERSION }}" } else { "${{ env.DEFAULT_VERSION }}" }
+        nuget pack ${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version $version
+      shell: pwsh
+
+      
+      
+    # - name: Pack NuGet Package
+    #   run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ steps.extract_version.outputs.tag_version }}
 
       # - name: Pack NuGet package
       # run: nuget pack FFF.Clipboard/FFF.Clipboard.csproj -Properties Configuration=Release -Version ${{ steps.get_version.outputs.VERSION }}
