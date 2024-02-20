@@ -46,9 +46,9 @@ jobs:
       run: nuget pack ${{ env.SOLUTION_NAME }}/${{ env.PROJECT_NAME }}.csproj -Properties Configuration=Release -Version ${{ env.VERSION }}
       shell: pwsh
 
-    - name: Push Package Into NuGet
-      run: nuget push *.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json 
-      if: success()
+    # - name: Push Package Into NuGet
+    #   run: nuget push *.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json 
+    #   if: success()
 
     # - name: Push Package Into GitHub
     #   run: nuget push *.nupkg -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source https://nuget.pkg.github.com/epotok22/index.json
