@@ -7,6 +7,7 @@ on:
 env:
   SOLUTION_NAME: FFF.Clipboard
   PROJECT_NAME: FFF.Clipboard
+  GITHUB_ACCOUNT: ePotok22
 
 jobs:
   build-and-package:
@@ -50,6 +51,16 @@ jobs:
     #   run: nuget push *.nupkg -ApiKey ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json 
     #   if: success()
 
-    - name: ush Package Into GitHub
-      run: nuget push *.nupkg -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source https://nuget.pkg.github.com/epotok22/index.json
-      if: success()
+    # - name: Push Package Into GitHub
+    #   run: nuget push *.nupkg -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source https://nuget.pkg.github.com/epotok22/index.json
+    #   if: success()
+
+    - name: Set up NuGet for GitHub Packages
+      run: |
+        nuget sources Add -Name "GitHub" -Source https://nuget.pkg.github.com/${{ env.GITHUB_ACCOUNT }}/index.json -Username ${{ env.GITHUB_ACCOUNT }} -Password ${{ secrets.GH_PACKAGES_TOKEN }}
+        nuget setapikey ${{ secrets.GH_PACKAGES_TOKEN }} -Source "GitHub"
+      shell: pwsh
+    
+    - name: Push Package Into GitHub
+      run: nuget push "*.nupkg" -Source "GitHub"
+      shell: pwsh
