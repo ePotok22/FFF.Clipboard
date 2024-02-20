@@ -46,23 +46,22 @@ jobs:
   process-test-results:
     needs: build-and-test 
     runs-on: ubuntu-latest
-    steps:
+    steps:     
       - name: Download test artifact
         uses: actions/download-artifact@v4.1.1
         with:
           name: NUnit Test Results   
           path: ./report
-
-      - name: Delete test artifact
-        uses: geekyeggo/delete-artifact@v4.1.0
-        with:
-         name:  NUnit Test Results   
-         token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Fetch transform code
         run: |
           wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
-        shell: bash   
+        shell: bash
+
+      - name: Install NUnit
+        run: |
+          nuget install NUnit.Console -Version 3.16.3
+        shell: bash
         
       - name: Transform NUnit3 to JUnit
         run: |
