@@ -15,6 +15,7 @@
     <Author>FangFooFong (FFF)</Author>
     <Description>Clipboard helper for easy to use</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <TargetFrameworkProfile />
   </PropertyGroup>

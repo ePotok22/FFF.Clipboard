@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Clipboard")]
-[assembly: AssemblyDescription("Clipboard helper for easy to use")]
+[assembly: AssemblyDescription("Clipboard is a C# library, designed to enhance clipboard functionality in Windows environments. This application allows users to efficiently manage clipboard history, copy, paste, and perform other advanced clipboard operations with ease.")]
 [assembly: AssemblyConfiguration("Release")]
 [assembly: AssemblyCompany("FFF")]
 [assembly: AssemblyProduct("FFF.Clipboard")]
-[assembly: AssemblyCopyright("Copyright ©  2022")]
+[assembly: AssemblyCopyright("Copyright © 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.1.1.0")]
+[assembly: AssemblyFileVersion("1.1.1.0")]
