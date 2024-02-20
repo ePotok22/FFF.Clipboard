@@ -14,7 +14,7 @@ env:
   
 jobs:
   build-and-test:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:  
     - name: Checkout 
       uses: actions/checkout@v4.1.1
@@ -43,31 +43,39 @@ jobs:
         name: NUnit Test Results
         path: TestResults.xml
 
-  process-test-results:
-    needs: build-and-test
+  reports:
+    needs: build-and-test 
     runs-on: ubuntu-latest
     steps:
-    - name: Download Test Results
-      uses: actions/download-artifact@v4.1.2
-      with:
-        name: NUnit Test Results
-        path: ./report
-
-    - name: Download Transform Code
-      run: |
+      - uses: actions/checkout@v4.1.1
+      - name: Fetch transform code
+        run: |
           wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
-    
-    - name: Transform NUnit3 to JUnit
-      run: |
+        shell: bash
+        
+      - name: Download test artifact
+        uses: actions/download-artifact@v4.1.1
+        with:
+          name: NUnit Test Results   
+          path: ./report
+
+      - name: Install NUnit
+        run: |
+          nuget install NUnit.Console -Version 3.16.3
+        shell: bash
+        
+      - name: Transform NUnit3 to JUnit
+        run: |
           $xml = Resolve-Path "report/TestResults.xml" # Replace with your specific file name
           $output = Join-Path ($pwd.Path) "report/${{ env.TEST_PROJECT_NAME }}.xml" # Output file name
           $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
           $xslt.Load("nunit3-junit.xslt");
           $xslt.Transform($xml, $output);
+        shell: pwsh
 
-    - name: Publish report
-      uses: dorny/test-reporter@v1.8.0
-      with:
+      - name: Publish report
+        uses: dorny/test-reporter@v1.8.0
+        with:
           name: "test-reports"
           path: "report/${{ env.TEST_PROJECT_NAME }}.xml"
           reporter: jest-junit
