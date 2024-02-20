@@ -43,26 +43,25 @@ jobs:
         name: NUnit Test Results
         path: TestResults.xml
 
-  reports:
+  process-test-results:
     needs: build-and-test 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.1
-      - name: Fetch transform code
-        run: |
-          wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
-        shell: bash
-        
       - name: Download test artifact
         uses: actions/download-artifact@v4.1.1
         with:
           name: NUnit Test Results   
           path: ./report
 
-      - name: Install NUnit
+      - name: Delete test artifact
+        uses: geekyeggo/delete-artifact@v4.1.0
+        with:
+         name:  NUnit Test Results   
+         token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Fetch transform code
         run: |
-          nuget install NUnit.Console -Version 3.16.3
-        shell: bash
+          wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
         
       - name: Transform NUnit3 to JUnit
         run: |
