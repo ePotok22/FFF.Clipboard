@@ -2,9 +2,12 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 name: 'CI'
 
-on: [pull_request]
-
-
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+    
 env:
   SOLUTION_NAME: FFF.Clipboard
   TEST_PROJECT_NAME: FFF.Clipboard.Tests
