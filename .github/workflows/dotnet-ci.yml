@@ -58,11 +58,6 @@ jobs:
         with:
           name: NUnit Test Results   
           path: ./report
-
-      - name: Install NUnit
-        run: |
-          nuget install NUnit.Console -Version 3.16.3
-        shell: bash
         
       - name: Transform NUnit3 to JUnit
         run: |
