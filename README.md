@@ -1,7 +1,7 @@
 # Clipboard
 
 ## Overview
-Clipboard is a C# application library, designed to enhance clipboard functionality in Windows environments. This application allows users to efficiently manage clipboard history, copy, paste, and perform other advanced clipboard operations with ease.
+Clipboard is a C# library, designed to enhance clipboard functionality in Windows environments. This application allows users to efficiently manage clipboard history, copy, paste, and perform other advanced clipboard operations with ease.
 
 ## Features
 - Clipboard history management.
