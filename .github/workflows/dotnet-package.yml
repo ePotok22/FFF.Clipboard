@@ -52,17 +52,17 @@ jobs:
 
 
     - name: Configure NuGet Source and Push Package
-      run: |
-        $Env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
-        $feedEndpoint = "https://nuget.pkg.github.com/ePotok22/index.json"
-        $username = "ePotok22"
-        $password = "${{ secrets.GH_PACKAGES_TOKEN }}" # Use the GitHub PAT stored as a secret
-        
-        # Add the NuGet source with authentication
-        nuget sources Add -Name "GitHub" -Source $feedEndpoint -Username $username -Password $password
-        
-        # Push the package to GitHub Packages
-        nuget push "*.nupkg" -Source "GitHub" -ApiKey $password
+    - run: |
+          $Env:NUGET_CREDENTIALPROVIDER_SESSIONTOKENCACHE_ENABLED = "true"
+          $feedEndpoint = "https://nuget.pkg.github.com/${{ github.actor }}/index.json"
+          $username = "${{ github.actor }}"
+          $password = "${{ secrets.GH_PACKAGES_TOKEN }}" # Use the GitHub PAT stored as a secret
+          
+          # Add the NuGet source with authentication
+          nuget sources Add -Name "GitHub" -Source $feedEndpoint -Username $username -Password $password
+          
+          # Push the package to GitHub Packages
+          nuget push "*.nupkg" -Source "GitHub" -ApiKey $password
       shell: pwsh
       
     # - name: Push Package Into GitHub
