@@ -1,26 +1,42 @@
 # Clipboard
 
 ## Overview
-Clipboard is a C# library, designed to enhance clipboard functionality in Windows environments. This application allows users to efficiently manage clipboard history, copy, paste, and perform other advanced clipboard operations with ease.
+Welcome to Clipboard, a robust C# library designed to extend and enhance clipboard functionality on Windows platforms. This library provides developers with tools to manage clipboard history and improve the efficiency of copy-paste operations.
 
 ## Features
-- Clipboard history management.
-- Easy copy-paste operations.
+- Clipboard History Management: Tracks and manages the history of clipboard contents.
+- Easy Integration: Designed to be easily integrated into .NET applications.
 
-## Getting Started
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
-
+## Quick Start
 ### Prerequisites
-- .NET Framework 4.6.2
+Ensure you have .NET Framework 4.6.2 or higher installed.
 
 ### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/ePotok22/Clipboard.git
-   
-   dotnet restore 
+Clone the repository using Git:
 
-   dotnet build
+``` csharp
+Copy code
+git clone https://github.com/ePotok22/Clipboard.git
+```
 
-### Nuget
-- 🔗https://www.nuget.org/packages/FFF.Clipboard 
+Build the project:
+
+``` csharp
+dotnet build
+```
+### Usage
+Here’s a simple example of how to use Clipboard to access clipboard history:
+
+``` csharp
+using FFF.Clipboard;
+
+// Get the latest item from the clipboard
+string text = ClipboardManager.GetText(TextDataFormat.Text);
+
+Console.WriteLine("Last copied text: " + text);
+```
+## Contributing
+We welcome contributions from the community. Please read our CONTRIBUTING.md file for guidelines on how to make contributions.
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
